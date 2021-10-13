@@ -46,7 +46,8 @@ pattern3 = re.compile('|'.join(keywords3))
 token_amount = []
 unlock_countdown_days = []
 unlock_date = []
-print(type(division_text))
+
+
 # create temporary .txt file to store output from scrape, and don't delete it when done
 with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp:
     print(tmp.name)
@@ -67,8 +68,6 @@ with open(tmp.name) as tmp:
 
 # remove the file manually
 os.remove(tmp.name)
-
-
 
 # # write .txt file with the text output of the unlocks
 # file1 = open("TrustswapTokenUnlocks.txt","w")
@@ -132,19 +131,21 @@ token_amount = [float("{:.2f}".format(int(number) / 100.0)) for number in token_
 unlock_countdown_days = [j.split('D', 1)[0] for j in unlock_countdown_days]
 unlock_countdown_days = [int(days) for days in unlock_countdown_days]
 
+# apply changes
 for number in token_amount:
     number = float("{:.2f}".format(number / 100.0))
     print(number, type(number))
 
 
 # create dataframe with formatted columns
+# df_formatted contains all unlocks and days until unlock in the order displayed on Team Finance
 d_formatted = {'VSO Amount': token_amount, 'Days Until Unlock': unlock_countdown_days[1:]}  # , 'col3': unlock_date[1:]}
 df_formatted = pd.DataFrame(d_formatted)
 df_formatted['VSO Amount'] = df_formatted['VSO Amount'].astype(float)
 
 
 # replace 2 VSO amounts where number formatting was messed up with number 1
-df_formatted['VSO Amount'][96] = 1 # todo find dynamic way of replacing the 0.01 for 1 (maybe it doesnt matter because its been issued already)
+df_formatted['VSO Amount'][96] = 1
 df_formatted['VSO Amount'][97] = 1
 
 
@@ -154,12 +155,12 @@ print(df_formatted)
 
 
 # create new dataframe with VSO amount ordered by Days Until Unlock
-df_sorted = df_formatted.sort_values(by=['Days Until Unlock'])
+df_sorted_days_until_unlock = df_formatted.sort_values(by=['Days Until Unlock'])
 
 
-#
+# plot unlocks by days until unlock
 fig, ax = plt.subplots()
-ax.bar(df_sorted['Days Until Unlock'], df_sorted['VSO Amount'])
+ax.bar(df_sorted_days_until_unlock['Days Until Unlock'], df_sorted_days_until_unlock['VSO Amount'])
 
 ax.set(xlabel='Days Until Unlock', ylabel='VSO Unlocked', title='VSO Token Unlocks')
 ax.grid()
@@ -167,39 +168,23 @@ plt.rcParams["figure.figsize"] = (50, 20)
 plt.show()
 
 
+# create dataframe where unlocks for same unlock dates are summed (there won't be repeated values in the Days Until
+# Unlock column)
+df_grouped_days_until_unlock = df_sorted_days_until_unlock.groupby(df_sorted_days_until_unlock['Days Until Unlock']).sum()
+df_grouped_days_until_unlock['Days Until Unlock'] = df_grouped.index
 
-
-x = sum(df_sorted['VSO Amount'])
-print(x)
-plt.bar(df_sorted['Days Until Unlock'], df_sorted['VSO Amount'])
-
-
-
-
-df_grouped = df_sorted.groupby(df_sorted['Days Until Unlock']).sum()
-df_grouped['Days Until Unlock'] = df_grouped.index
-df_grouped
-
-
-
-
-plt.bar(df_grouped.index, df_grouped['VSO Amount'])
-
-
-
-
+# add cumulative VSO unlocks column (dataframe remains ordered by Days Until Unlock)
 df_grouped['Cummulative VSO Unlocks'] = df_grouped['VSO Amount'].cumsum()
 
-
-
-
+# save df_formatted into a .csv file within a .zip file
 compression_opts = dict(method='zip',
-                        archive_name='VSO Unlocks 20210929.csv')
-df_grouped.to_csv('VSO Unlocks 20211012.zip', index=False,
-                  compression=compression_opts)
-
-
-compression_opts = dict(method='zip',
-                        archive_name='VSO Unlocks - All Unlocks Not Ordered.csv')
-df_formatted.to_csv('VSO Unlocks - All Unlocks Not Ordered.zip', index=False,
+                        archive_name='VSO Unlocks Not Ordered.csv')
+df_formatted.to_csv('VSO Unlocks Not Ordered.zip', index=False,
                     compression=compression_opts)
+
+
+# save the df_grouped_days_until_unlock into a .csv file within a .zip file
+compression_opts = dict(method='zip',
+                        archive_name='VSO Unlocks Grouped by Days Until Unlock.csv')
+df_grouped_days_until_unlock.to_csv('VSO Unlocks Grouped by Days Until Unlock.zip', index=False,
+                  compression=compression_opts)
