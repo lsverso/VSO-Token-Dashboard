@@ -24,7 +24,7 @@ import json
 import streamlit as st
 import pandas as pd
 import numpy as np
-from pycoingecko import CoinGeckoAPI
+# from pycoingecko import CoinGeckoAPI
 
 
 url = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=verso&order=market_cap_desc&per_page=100&page=1&sparkline=false', headers={'accept':'application/json'})
