@@ -1,37 +1,28 @@
-import pandas as pd
 # import streamlit as st
 # import plotly.express as px
 # import plotly.graph_objects as go
-
-
-df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered.csv')
-df2 = pd.read_excel(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Date.xlsx')
-
-print(df2.to_dict())
-
-df = pd.DataFrame.from_dict({'VSO Amount': {0: 16866662, 1: 1791664, 2: 1004165, 3: 1791664, 4: 983332, 5: 1791664, 6: 983332, 7: 1791664, 8: 983332, 9: 1791664, 10: 983332, 11: 1791664, 12: 983332, 13: 1791664, 14: 983332, 15: 1791664, 16: 4150006, 17: 416665, 18: 416665, 19: 416665, 20: 416665}, 'Days Until Unlock': {0: 0, 1: 18, 2: 19, 3: 48, 4: 49, 5: 79, 6: 80, 7: 110, 8: 111, 9: 138, 10: 139, 11: 169, 12: 170, 13: 199, 14: 200, 15: 230, 16: 231, 17: 260, 18: 291, 19: 322, 20: 352},
-                   'Unlock Date': {0: "Timestamp('2021-10-14 00:00:00')", 1: "Timestamp('2021-11-01 00:00:00')", 2: "Timestamp('2021-11-02 00:00:00')", 3: "Timestamp('2021-12-01 00:00:00')", 4: "Timestamp('2021-12-02 00:00:00')", 5: "Timestamp('2022-01-01 00:00:00')", 6: "Timestamp('2022-01-02 00:00:00')", 7: "Timestamp('2022-02-01 00:00:00')", 8: "Timestamp('2022-02-02 00:00:00')", 9: "Timestamp('2022-03-01 00:00:00')", 10: "Timestamp('2022-03-02 00:00:00')", 11: "Timestamp('2022-04-01 00:00:00')", 12: "Timestamp('2022-04-02 00:00:00')", 13: "Timestamp('2022-05-01 00:00:00')", 14: "Timestamp('2022-05-02 00:00:00')", 15: "Timestamp('2022-06-01 00:00:00')", 16: "Timestamp('2022-06-02 00:00:00')", 17: "Timestamp('2022-07-01 00:00:00')", 18: "Timestamp('2022-08-01 00:00:00')", 19: "Timestamp('2022-09-01 00:00:00')", 20: "Timestamp('2022-10-01 00:00:00')"},
-                   'Cummulative VSO Unlocks': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 7471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}})
-
-print(df.head)
-
-# st.title('VSO Unlocks Dashboard')
-#
-# st.subheader('VSO unlocks by date')
-# st.write(df2)
-#
-# st.subheader('VSO unlock amount by days until unlock')
-# st.bar_chart(df2['VSO Amount'])
-#
-# st.subheader('Cummulative VSO unlocks')
-# st.bar_chart(df2['Cummulative VSO Unlocks'])
-
-#######################################################################################################################################
-
 import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
+
+
+# df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered.csv')
+df2 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
+
+print(df2.to_dict())
+
+df = pd.DataFrame.from_dict({'VSO Amount': {0: 16866662, 1: 1791664, 2: 1004165, 3: 1791664, 4: 983332, 5: 1791664, 6: 983332, 7: 1791664, 8: 983332, 9: 1791664, 10: 983332, 11: 1791664, 12: 983332, 13: 1791664, 14: 983332, 15: 1791664, 16: 4150006, 17: 416665, 18: 416665, 19: 416665, 20: 416665},
+                             'Days Until Unlock': {0: 0, 1: 14, 2: 15, 3: 44, 4: 45, 5: 75, 6: 76, 7: 106, 8: 107, 9: 134, 10: 135, 11: 165, 12: 166, 13: 195, 14: 196, 15: 226, 16: 227, 17: 256, 18: 287, 19: 318, 20: 348},
+                             'Date of Unlock': {0: '10/17/2021', 1: '10/31/2021', 2: '11/1/2021', 3: '11/30/2021', 4: '12/1/2021', 5: '12/31/2021', 6: '1/1/2022', 7: '1/31/2022', 8: '2/1/2022', 9: '2/28/2022', 10: '3/1/2022', 11: '3/31/2022', 12: '4/1/2022', 13: '4/30/2022', 14: '5/1/2022', 15: '5/31/2022', 16: '6/1/2022', 17: '6/30/2022', 18: '7/31/2022', 19: '8/31/2022', 20: '9/30/2022'},
+                             'Cummulative VSO Unlocks': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 33537471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}}
+)
+
+print(df.head)
+
+#######################################################################################################################################
+
+
 
 # from pycoingecko import CoinGeckoAPI
 
@@ -55,10 +46,11 @@ st.set_page_config(page_title = 'Streamlit Dashboard',
     layout='wide',
     page_icon='💹')
 
-
-### market data
-
 st.title("Verso Unlocks Dashboard")
+
+
+
+# market data
 
 st.markdown("## Market Data")
 
@@ -66,7 +58,7 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi = st.columns(5)
 
 with first_kpi:
     st.markdown("**VSO Current Price**")
-    number1 = current_price
+    number1 = str(current_price) + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
@@ -76,21 +68,21 @@ with second_kpi:
 
 with third_kpi:
     st.markdown("**Market Capitalization**")
-    number3 = market_cap
+    number3 = str(market_cap) + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
 
 with fourth_kpi:
     st.markdown("**Circulating Supply**")
-    number4 = circulating_supply
+    number4 = str(int(circulating_supply)) + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
 
 with fifth_kpi:
     st.markdown("**Fully Diluted Valuation**")
-    number5 = current_price * 100000000
+    number5 = str(current_price * 100000000) + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number5}</h1>", unsafe_allow_html=True)
 
 
-### top row
+# top row
 
 st.markdown("<hr/>", unsafe_allow_html=True)
 
@@ -110,7 +102,7 @@ with second_kpi:
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
 
 
-### second row
+# second row
 
 st.markdown("<hr/>", unsafe_allow_html=True)
 
@@ -140,29 +132,13 @@ with fourth_kpi:
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
 
 
-st.markdown("## Chart Section: 1")
+st.markdown("## VSO Unlock Schedule")
 
-first_chart, second_chart = st.columns(2)
+st.subheader('Dataset')
+st.write(df)
 
+st.subheader('VSO Unlocks per Date')
+st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['VSO Amount'])
 
-with first_chart:
-    chart_data = pd.DataFrame(np.random.randn(20, 3),columns=['a', 'b', 'c'])
-    st.line_chart(chart_data)
-
-with second_chart:
-    chart_data = pd.DataFrame(np.random.randn(20, 3),columns=['a', 'b', 'c'])
-    st.line_chart(chart_data)
-
-
-st.markdown("## Chart Section: 2")
-
-first_chart, second_chart = st.columns(2)
-
-
-with first_chart:
-    chart_data = pd.DataFrame(np.random.randn(100, 3),columns=['a', 'b', 'c'])
-    st.line_chart(chart_data)
-
-with second_chart:
-    chart_data = pd.DataFrame(np.random.randn(2000, 3),columns=['a', 'b', 'c'])
-    st.line_chart(chart_data)
+st.subheader('Cummulative VSO Unlocks per Date')
+st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cummulative VSO Unlocks'])
