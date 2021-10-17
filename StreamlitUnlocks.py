@@ -1,11 +1,20 @@
-# import pandas as pd
+import pandas as pd
 # import streamlit as st
 # import plotly.express as px
 # import plotly.graph_objects as go
-#
-# df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered.csv')
-# df2 = pd.read_excel(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Date.xlsx')
-#
+
+
+df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered.csv')
+df2 = pd.read_excel(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Date.xlsx')
+
+print(df2.to_dict())
+
+df = pd.DataFrame.from_dict({'VSO Amount': {0: 16866662, 1: 1791664, 2: 1004165, 3: 1791664, 4: 983332, 5: 1791664, 6: 983332, 7: 1791664, 8: 983332, 9: 1791664, 10: 983332, 11: 1791664, 12: 983332, 13: 1791664, 14: 983332, 15: 1791664, 16: 4150006, 17: 416665, 18: 416665, 19: 416665, 20: 416665}, 'Days Until Unlock': {0: 0, 1: 18, 2: 19, 3: 48, 4: 49, 5: 79, 6: 80, 7: 110, 8: 111, 9: 138, 10: 139, 11: 169, 12: 170, 13: 199, 14: 200, 15: 230, 16: 231, 17: 260, 18: 291, 19: 322, 20: 352},
+                   'Unlock Date': {0: "Timestamp('2021-10-14 00:00:00')", 1: "Timestamp('2021-11-01 00:00:00')", 2: "Timestamp('2021-11-02 00:00:00')", 3: "Timestamp('2021-12-01 00:00:00')", 4: "Timestamp('2021-12-02 00:00:00')", 5: "Timestamp('2022-01-01 00:00:00')", 6: "Timestamp('2022-01-02 00:00:00')", 7: "Timestamp('2022-02-01 00:00:00')", 8: "Timestamp('2022-02-02 00:00:00')", 9: "Timestamp('2022-03-01 00:00:00')", 10: "Timestamp('2022-03-02 00:00:00')", 11: "Timestamp('2022-04-01 00:00:00')", 12: "Timestamp('2022-04-02 00:00:00')", 13: "Timestamp('2022-05-01 00:00:00')", 14: "Timestamp('2022-05-02 00:00:00')", 15: "Timestamp('2022-06-01 00:00:00')", 16: "Timestamp('2022-06-02 00:00:00')", 17: "Timestamp('2022-07-01 00:00:00')", 18: "Timestamp('2022-08-01 00:00:00')", 19: "Timestamp('2022-09-01 00:00:00')", 20: "Timestamp('2022-10-01 00:00:00')"},
+                   'Cummulative VSO Unlocks': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 7471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}})
+
+print(df.head)
+
 # st.title('VSO Unlocks Dashboard')
 #
 # st.subheader('VSO unlocks by date')
@@ -19,11 +28,11 @@
 
 #######################################################################################################################################
 
-import requests
-import json
-import streamlit as st
-import pandas as pd
 import numpy as np
+import pandas as pd
+import requests
+import streamlit as st
+
 # from pycoingecko import CoinGeckoAPI
 
 
