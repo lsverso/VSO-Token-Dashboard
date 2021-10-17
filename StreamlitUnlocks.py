@@ -1,25 +1,22 @@
-# import streamlit as st
 # import plotly.express as px
 # import plotly.graph_objects as go
-import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
 
-
-# df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered.csv')
-# df2 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
+# df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
 #
-# print(df2.to_dict())
+# print(df1.to_dict())
 
 df = pd.DataFrame.from_dict({'VSO Amount': {0: 16866662, 1: 1791664, 2: 1004165, 3: 1791664, 4: 983332, 5: 1791664, 6: 983332, 7: 1791664, 8: 983332, 9: 1791664, 10: 983332, 11: 1791664, 12: 983332, 13: 1791664, 14: 983332, 15: 1791664, 16: 4150006, 17: 416665, 18: 416665, 19: 416665, 20: 416665},
                              'Days Until Unlock': {0: 0, 1: 14, 2: 15, 3: 44, 4: 45, 5: 75, 6: 76, 7: 106, 8: 107, 9: 134, 10: 135, 11: 165, 12: 166, 13: 195, 14: 196, 15: 226, 16: 227, 17: 256, 18: 287, 19: 318, 20: 348},
                              'Date of Unlock': {0: '10/17/2021', 1: '10/31/2021', 2: '11/1/2021', 3: '11/30/2021', 4: '12/1/2021', 5: '12/31/2021', 6: '1/1/2022', 7: '1/31/2022', 8: '2/1/2022', 9: '2/28/2022', 10: '3/1/2022', 11: '3/31/2022', 12: '4/1/2022', 13: '4/30/2022', 14: '5/1/2022', 15: '5/31/2022', 16: '6/1/2022', 17: '6/30/2022', 18: '7/31/2022', 19: '8/31/2022', 20: '9/30/2022'},
-                             'Cummulative VSO Unlocks': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 33537471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}}
+                             'Cumulative VSO Amount': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 33537471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}}
 )
 
+df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
 print(df.head)
-
+print(df.dtypes)
 #######################################################################################################################################
 
 
@@ -46,7 +43,6 @@ st.set_page_config(page_title = 'Streamlit Dashboard',
     page_icon='💹')
 
 st.title("Verso Unlocks Dashboard")
-
 
 
 # market data
@@ -127,9 +123,10 @@ with third_kpi:
 
 with fourth_kpi:
     st.markdown("**Pools**")
-    number1 = 111
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    number4 = 111
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
 
+st.markdown("<hr/>", unsafe_allow_html=True)
 
 st.markdown("## VSO Unlock Schedule")
 
@@ -139,5 +136,5 @@ st.write(df)
 st.subheader('VSO Unlocks per Date')
 st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['VSO Amount'])
 
-st.subheader('Cummulative VSO Unlocks per Date')
-st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cummulative VSO Unlocks'])
+st.subheader('Cumulative VSO Unlocks per Date')
+st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cumulative VSO Amount'])
