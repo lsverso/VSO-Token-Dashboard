@@ -156,9 +156,10 @@ print(df_formatted)
 
 # create new dataframe with VSO amount ordered by Days Until Unlock
 df_sorted_days_until_unlock = df_formatted.sort_values(by=['Days Until Unlock'])
+print(df_sorted_days_until_unlock)
 
 
-# plot unlocks by days until unlock
+# plot unlocks by days until unlock (just to visually confirm data is correct)
 fig, ax = plt.subplots()
 ax.bar(df_sorted_days_until_unlock['Days Until Unlock'], df_sorted_days_until_unlock['VSO Amount'])
 
@@ -171,20 +172,22 @@ plt.show()
 # create dataframe where unlocks for same unlock dates are summed (there won't be repeated values in the Days Until
 # Unlock column)
 df_grouped_days_until_unlock = df_sorted_days_until_unlock.groupby(df_sorted_days_until_unlock['Days Until Unlock']).sum()
-df_grouped_days_until_unlock['Days Until Unlock'] = df_grouped.index
+df_grouped_days_until_unlock['Days Until Unlock'] = df_grouped_days_until_unlock.index
 
 # add cumulative VSO unlocks column (dataframe remains ordered by Days Until Unlock)
-df_grouped['Cummulative VSO Unlocks'] = df_grouped['VSO Amount'].cumsum()
+df_grouped_days_until_unlock['Cummulative VSO Unlocks'] = df_grouped_days_until_unlock['VSO Amount'].cumsum()
 
 # save df_formatted into a .csv file within a .zip file
 compression_opts = dict(method='zip',
-                        archive_name='VSO Unlocks Not Ordered.csv')
-df_formatted.to_csv('VSO Unlocks Not Ordered.zip', index=False,
+                        archive_name='VSO Unlocks Not Ordered 20211017.csv')
+df_formatted.to_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered 20211017.zip',
+                    index=False,
                     compression=compression_opts)
 
 
 # save the df_grouped_days_until_unlock into a .csv file within a .zip file
 compression_opts = dict(method='zip',
-                        archive_name='VSO Unlocks Grouped by Days Until Unlock.csv')
-df_grouped_days_until_unlock.to_csv('VSO Unlocks Grouped by Days Until Unlock.zip', index=False,
-                  compression=compression_opts)
+                        archive_name='VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
+df_grouped_days_until_unlock.to_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.zip',
+                                    index=False,
+                                    compression=compression_opts)
