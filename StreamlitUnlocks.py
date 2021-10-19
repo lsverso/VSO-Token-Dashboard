@@ -78,7 +78,7 @@ st.markdown("<hr/>", unsafe_allow_html=True)
 
 st.markdown("## Locked Tokens for Vesting")
 
-first_kpi, second_kpi, third_kpi = st.columns(3)
+first_kpi, second_kpi = st.columns(2)
 
 
 with first_kpi:
