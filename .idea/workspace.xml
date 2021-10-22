@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Started manual input of addresses per unlock.">
-      <change afterPath="$PROJECT_DIR$/UnlocksPivotTable.py" afterDir="false" />
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Added multiindex DataFrame and segmented columns.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StreamlitUnlocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/StreamlitUnlocks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VSO Unlocks Not Ordered 20211017.csv" beforeDir="false" afterPath="$PROJECT_DIR$/VSO Unlocks Not Ordered 20211017.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +30,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/UnlocksPivotTable.py" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunManager" selected="Python.UnlocksPivotTable">
     <configuration name="StreamlitUnlocks" type="PythonConfigurationType" factoryName="Python">
@@ -119,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634728750448</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added multiindex DataFrame and segmented columns.">
+      <created>1634921849180</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1634921849180</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -138,7 +143,8 @@
     <MESSAGE value="Idk, changes to these files were made when fixing the git path." />
     <MESSAGE value="Deleted useless variable." />
     <MESSAGE value="Started manual input of addresses per unlock." />
-    <option name="LAST_COMMIT_MESSAGE" value="Started manual input of addresses per unlock." />
+    <MESSAGE value="Added multiindex DataFrame and segmented columns." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added multiindex DataFrame and segmented columns." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
