@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
 # df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
@@ -22,8 +22,8 @@ df = pd.DataFrame.from_dict({'VSO Amount': {0: 250000, 1: 250000, 2: 250000, 3: 
 df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
 pivot_table = df.pivot_table(index=['Date of Unlock', 'Internal or External'], values=['VSO Amount'], fill_value=0, aggfunc=np.sum)
 
-pivot_table.unstack().plot(kind='bar', stacked=True)
-plt.show()
+# pivot_table.unstack().plot(kind='bar', stacked=True)
+st.pyplot(pivot_table.unstack())
 # print(df1.to_dict())
 
 # explicitly create DataFrame with Unlock Schedule as of October 17th 2021 (static dataset/dataframe)
