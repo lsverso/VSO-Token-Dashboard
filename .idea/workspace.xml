@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Added multiindex DataFrame and segmented columns.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Imported matplotlib.">
       <change beforePath="$PROJECT_DIR$/StreamlitUnlocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/StreamlitUnlocks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -124,7 +123,35 @@
       <option name="project" value="LOCAL" />
       <updated>1634921849180</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Commented out local csv read.">
+      <created>1634922727569</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1634922727569</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Imported numpy">
+      <created>1634922856830</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1634922856830</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Imported matplotlib.">
+      <created>1634922889615</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1634922889615</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Imported matplotlib.">
+      <created>1634922985172</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1634922985172</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -144,7 +171,10 @@
     <MESSAGE value="Deleted useless variable." />
     <MESSAGE value="Started manual input of addresses per unlock." />
     <MESSAGE value="Added multiindex DataFrame and segmented columns." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added multiindex DataFrame and segmented columns." />
+    <MESSAGE value="Commented out local csv read." />
+    <MESSAGE value="Imported numpy" />
+    <MESSAGE value="Imported matplotlib." />
+    <option name="LAST_COMMIT_MESSAGE" value="Imported matplotlib." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -156,7 +186,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/StreamlitUnlocks.py</url>
-          <line>54</line>
+          <line>57</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>

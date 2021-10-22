@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
+import sys
 sys.path.append('C:\Python39\Lib\site-packages')
 import matplotlib.pyplot as plt
 
