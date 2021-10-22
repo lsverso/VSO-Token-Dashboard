@@ -5,8 +5,6 @@ import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
-import sys
-sys.path.append('C:\Python39\Lib\site-packages')
 import matplotlib.pyplot as plt
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
@@ -23,8 +21,6 @@ df = pd.DataFrame.from_dict({'VSO Amount': {0: 250000, 1: 250000, 2: 250000, 3: 
 
 df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
 pivot_table = df.pivot_table(index=['Date of Unlock', 'Internal or External'], values=['VSO Amount'], fill_value=0, aggfunc=np.sum)
-
-pivot_table.unstack().plot(kind='bar', stacked=True)
 
 pivot_table.unstack().plot(kind='bar', stacked=True)
 plt.show()
