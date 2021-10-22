@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
+sys.path.append('C:\Python39\Lib\site-packages')
 import matplotlib.pyplot as plt
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
