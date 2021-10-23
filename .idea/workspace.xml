@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Imported matplotlib.">
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Changed plot mode.">
+      <change beforePath="$PROJECT_DIR$/.idea/VSO-Token-Unlocks.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/VSO-Token-Unlocks.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StreamlitUnlocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/StreamlitUnlocks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,9 +42,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\L.SCHEUER\PycharmProjects\pythonProject\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/StreamlitUnlocks.py" />
@@ -165,7 +168,21 @@
       <option name="project" value="LOCAL" />
       <updated>1634923053391</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Minor changes.">
+      <created>1634923527320</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1634923527320</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Changed plot mode.">
+      <created>1634923646659</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1634923646659</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -188,7 +205,9 @@
     <MESSAGE value="Commented out local csv read." />
     <MESSAGE value="Imported numpy" />
     <MESSAGE value="Imported matplotlib." />
-    <option name="LAST_COMMIT_MESSAGE" value="Imported matplotlib." />
+    <MESSAGE value="Minor changes." />
+    <MESSAGE value="Changed plot mode." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed plot mode." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
