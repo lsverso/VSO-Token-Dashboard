@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
 # df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
@@ -164,8 +164,9 @@ st.write(df)
 st.subheader('VSO Unlocks per Date')
 st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['VSO Amount'])
 
-st.subheader('Cumulative VSO Unlocks per Date')
-st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cumulative VSO Amount'])
+# TODO add cumulative back to DataFrame
+# st.subheader('Cumulative VSO Unlocks per Date')
+# st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cumulative VSO Amount'])
 
 # price charts section
 st.markdown("<hr/>", unsafe_allow_html=True)
@@ -173,4 +174,4 @@ st.markdown("<hr/>", unsafe_allow_html=True)
 st.markdown("## VSO and AVAX Price Charts")
 
 pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
-plt.show(pivot_chart)
+plt.show()
