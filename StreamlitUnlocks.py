@@ -1,5 +1,6 @@
-# import plotly.express as px
-# import plotly.graph_objects as go
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 # from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import requests
@@ -22,6 +23,8 @@ df = pd.DataFrame.from_dict({'VSO Amount': {0: 250000, 1: 250000, 2: 250000, 3: 
 df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
 pivot_table = df.pivot_table(index=['Date of Unlock', 'Internal or External'], values=['VSO Amount'], fill_value=0, aggfunc=np.sum)
 
+pivot_table = df.pivot_table(index='Date of Unlock', columns='Internal or External', values='VSO Amount', aggfunc='sum', fill_value=0)
+
 # pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
 # st.pyplot(pivot_chart)
 # print(df1.to_dict())
@@ -37,18 +40,6 @@ pivot_table = df.pivot_table(index=['Date of Unlock', 'Internal or External'], v
 
 # change data type of Date of Unlock Column to datetime
 # df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
-#
-# addresses = ['0x308D2Ac1Bab7D0211717F969602fBC26D286555A',
-#                    '0x0fecA26DF57fA876EFd8Afd57DA52B94a04bb489',
-#                    '0xD55A5d574842E4aFff7470A60AF8343672cE6687',
-#                    '0x1f4EB1a3C7A5777b1211F760D106734159F50ACB',
-#                    '0x0A5E7C50eA6BB695F234e75D97D3381592B59C9F',
-#                    '0x6c05437e3A0a6EC0379dF5A194C3ad01f1164349',
-#                    '0xaE778784228B799fa9560ea24fDcda6795205F27',
-#                    '0x906935f4b42e632137504C0ea00D43C6442272bf',
-#                    '0xb1bE473297660fCb4a3A92201b3E6BF788B0Ba61']
-#
-# df['Vesting Address'] = df[df.loc(address == '0x308D2Ac1Bab7D0211717F969602fBC26D286555A')].isin(df2['Other Add')]
 
 
 # get market data from coingecko's API and assign values to variables
@@ -173,5 +164,40 @@ st.markdown("<hr/>", unsafe_allow_html=True)
 
 st.markdown("## VSO and AVAX Price Charts")
 
+
+# fig, ax = plt.subplots()
+
+# fig = px.scatter(df, x='Date of Unlock', y='',
+#                  color = 'company',
+#                  color_discrete_sequence=['Blue', 'Green'])
+# fig.show()
 pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
-plt.show()
+#
+# fig = px.bar(pivot_table)
+# fig.update_layout(barmode = 'stack')#, x="nation", y="count", color="medal", title="Long-Form Input")
+# fig.show()
+
+# pivot_table.unstack().plot(kind='bar', stacked=True)
+# plt.show()
+
+# fig = go.Figure(data=pivot_table.unstack())
+# # Change the bar mode
+# fig.update_layout(barmode='stack')
+# fig.show()
+
+# fig = make_subplots(rows=1, cols=1)
+
+# add bars
+df.reset_index()
+colors = px.colors.qualitative.T10
+fig = px.bar(pivot_table,
+             x = pivot_table.index,
+             y = [c for c in pivot_table.columns],
+             template = 'plotly_dark',
+             color_discrete_sequence = colors,
+             title = 'VSO Unlocks by Date',
+             height=800,
+             width=2000
+             )
+# fig.update_layout(barmode='stack')
+st.plotly_chart(fig)
