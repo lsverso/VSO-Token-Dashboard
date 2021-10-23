@@ -172,5 +172,5 @@ st.markdown("<hr/>", unsafe_allow_html=True)
 
 st.markdown("## VSO and AVAX Price Charts")
 
-pivot_table.unstack().plot(kind='bar', stacked=True)
-plt.show()
+pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
+plt.show(pivot_chart)
