@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Added more market data and adjusted other stuff.">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Added Locked Tokens for Vesting correct numbers.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StreamlitUnlocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/StreamlitUnlocks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635098614801</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Added Locked Tokens for Vesting correct numbers.">
+      <created>1635109774830</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1635109774830</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,7 +259,8 @@
     <MESSAGE value="Fixed a few lines." />
     <MESSAGE value="Added token return graphs." />
     <MESSAGE value="Added more market data and adjusted other stuff." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added more market data and adjusted other stuff." />
+    <MESSAGE value="Added Locked Tokens for Vesting correct numbers." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Locked Tokens for Vesting correct numbers." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -263,11 +269,6 @@
           <url>file://$PROJECT_DIR$/UnlocksPivotTable.py</url>
           <line>6</line>
           <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/StreamlitUnlocks.py</url>
-          <line>207</line>
-          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
