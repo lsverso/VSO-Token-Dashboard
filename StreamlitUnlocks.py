@@ -1,12 +1,16 @@
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-# from pycoingecko import CoinGeckoAPI
+from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+from pycoingecko import CoinGeckoAPI
+from scipy.stats.stats import pearsonr
+
+
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
 # df1 = pd.read_csv(r'C:\Users\L.SCHEUER\OneDrive - Zurich Insurance\Escritorio\VSO Unlocks Not Ordered New Table.csv')
@@ -177,4 +181,64 @@ st.plotly_chart(fig)
 st.markdown("<hr/>", unsafe_allow_html=True)
 
 st.markdown("## VSO and AVAX Price Charts")
+
+# calling the API directly instead of using requests and url
+cg = CoinGeckoAPI()
+vso_prices = cg.get_coin_market_chart_by_id(id='verso', vs_currency='usd', days=30)
+avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd', days=30)
+
+# create date and price dataframes for each token
+df_vso = pd.DataFrame(vso_prices['prices'], columns=['Date', 'Price'])
+df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
+
+# create date-indexed df for all tokens (one token per column)
+df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO': df_vso['Price'], 'AVAX': df_avax['Price']})
+df_token_prices = df_token_prices.set_index('Date')
+df_token_prices.index = pd.to_datetime(df_token_prices.index, unit='ms')
+
+print(df_token_prices.head())
+
+# convert 'Date' column from unix (in milliseconds) format to datetime format
+# df_vso['Date'] = pd.to_datetime(df_vso['Date'], unit='ms')
+# df_avax['Date'] = pd.to_datetime(df_avax['Date'], unit='ms')
+
+# plot token returns (percentage change)
+newnames = {'wide_variable_0': 'VSO', 'wide_variable_1': 'AVAX'}
+
+st.markdown("### Cumulative Token Returns")
+# plot token cumulative returns (cumulative percentage change)
+fig2 = px.line(df_token_prices,
+             x = df_token_prices.index,
+             y = [(df_token_prices['VSO'].pct_change()+1).cumprod(), (df_token_prices['AVAX'].pct_change()+1).cumprod()],
+             template = 'plotly_dark',
+             color_discrete_sequence = colors,
+             # title = 'VSO Unlocks by Date',
+             height=800,
+             width=2000
+             )
+
+fig2.for_each_trace(lambda t: t.update(name = newnames[t.name],
+                                      legendgroup = newnames[t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
+                                     ))
+st.plotly_chart(fig2)
+
+st.markdown("### Token Returns (percentage change)")
+
+fig3 = px.line(df_token_prices,
+             x = df_token_prices.index,
+             y = [df_token_prices['VSO'].pct_change(), df_token_prices['AVAX'].pct_change()],
+             template = 'plotly_dark',
+             color_discrete_sequence = colors,
+             # title = 'VSO Unlocks by Date',
+             height=800,
+             width=2000
+             )
+
+fig3.for_each_trace(lambda t: t.update(name = newnames[t.name],
+                                      legendgroup = newnames[t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
+                                     ))
+st.plotly_chart(fig3)
+
 
