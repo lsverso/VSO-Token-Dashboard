@@ -6,10 +6,7 @@ import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
 from pycoingecko import CoinGeckoAPI
-from scipy.stats.stats import pearsonr
-
 
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
@@ -38,151 +35,23 @@ pivot_table = df.pivot_table(index='Date of Unlock', columns='Internal or Extern
 #                              'Cumulative VSO Amount': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 33537471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}})
 
 
-
-
 # change data type of Date of Unlock Column to datetime
 # df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
 
 
 # get market data from coingecko's API and assign values to variables
-url = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=verso&order=market_cap_desc&per_page=100&page=1&sparkline=false', headers={'accept':'application/json'})
+url = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=verso&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=7d', headers={'accept':'application/json'})
+# url = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=verso&order=market_cap_desc&per_page=100&page=1&sparkline=false', headers={'accept':'application/json'})
 current_price = url.json()[0]['current_price']
 price_change_percentage_24h = url.json()[0]['price_change_percentage_24h']
+price_changepercentage_7d = url.json()[0]['price_change_percentage_7d_in_currency']
 market_cap = url.json()[0]['market_cap']
 circulating_supply = url.json()[0]['circulating_supply']
 fdv = url.json()[0]['fully_diluted_valuation']
 total_volume = url.json()[0]['total_volume']
 
 
-# page layout
-st.set_page_config(page_title = 'Streamlit Dashboard',
-    layout='wide',
-    page_icon='💹')
-
-st.title("VSO Token Dashboard")
-
-
-# market data
-st.markdown("## Market Data")
-
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi = st.columns(5)
-
-with first_kpi:
-    st.markdown("**VSO Current Price**")
-    number1 = str(current_price) + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**Price Change Percentage 24h**")
-    number2 = str(price_change_percentage_24h) + '%'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
-
-with third_kpi:
-    st.markdown("**Market Capitalization**")
-    number3 = str(market_cap) + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
-
-with fourth_kpi:
-    st.markdown("**Circulating Supply**")
-    number4 = str(int(circulating_supply)) + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
-
-with fifth_kpi:
-    st.markdown("**Fully Diluted Valuation**")
-    number5 = str(current_price * 100000000) + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number5}</h1>", unsafe_allow_html=True)
-
-
-# top row
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## Locked Tokens for Vesting")
-
-first_kpi, second_kpi = st.columns(2)
-
-
-with first_kpi:
-    st.markdown("**Internal Addresses**")
-    number1 = 111
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**External Addresses**")
-    number2 = 222
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
-
-
-# second row
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## Circulating Supply")
-
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-
-with first_kpi:
-    st.markdown("**Internal Addresses**")
-    number1 = 111
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**External Addresses**")
-    number2 = 222
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
-
-with third_kpi:
-    st.markdown("**Farms**")
-    number3 = 333
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
-
-with fourth_kpi:
-    st.markdown("**Pools**")
-    number4 = 111
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
-
-
-# vso unlocks section
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## VSO Unlock Schedule")
-
-st.subheader('Dataset')
-st.write(df)
-
-# old unlocks by date chart (streamlit chart)
-# st.subheader('VSO Unlocks per Date')
-# st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['VSO Amount'])
-
-# TODO add cumulative back to DataFrame
-# st.subheader('Cumulative VSO Unlocks per Date')
-# st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cumulative VSO Amount'])
-
-pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
-
-# add bars
-st.subheader('VSO Unlocks per Date')
-
-colors = px.colors.qualitative.T10
-fig = px.bar(pivot_table,
-             x = pivot_table.index,
-             y = [c for c in pivot_table.columns],
-             template = 'plotly_dark',
-             color_discrete_sequence = colors,
-             # title = 'VSO Unlocks by Date',
-             height=800,
-             width=2000
-             )
-
-fig.update_traces(marker_line_width=1.5)
-# fig.update_layout(barmode='stack')
-st.plotly_chart(fig)
-
-# price charts section
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## VSO and AVAX Price Charts")
-
-# calling the API directly instead of using requests and url
+# calling VSO and AVAX pricing data from coingecko's API directly instead of using requests and url
 cg = CoinGeckoAPI()
 vso_prices = cg.get_coin_market_chart_by_id(id='verso', vs_currency='usd', days=30)
 avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd', days=30)
@@ -196,17 +65,91 @@ df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO': df_vso['Price'], 
 df_token_prices = df_token_prices.set_index('Date')
 df_token_prices.index = pd.to_datetime(df_token_prices.index, unit='ms')
 
-print(df_token_prices.head())
+
+# calculate 7-day price percentage change
+pd.set_option("display.max_rows", None, "display.max_columns", None)
+vso_price_change_percentage_7_days = df_token_prices['VSO'].pct_change()
+
+
+# prepare variables for plotting later
+colors = px.colors.qualitative.T10
+
+
+# page layout
+st.set_page_config(page_title = 'Streamlit Dashboard',
+    layout='wide',
+    page_icon='💹')
+
+st.title("VSO Token Dashboard")
+
+
+# market data
+st.markdown("## Market Data")
+
+first_kpi, second_kpi, third_kpi, fourth_kpi, = st.columns(4)
+
+with first_kpi:
+    st.markdown("**VSO Current Price**")
+    number1 = str(current_price) + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**Price Change 24h**")
+    number2 = str(round(price_change_percentage_24h, 2)) + '%'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Price Change 7d**")
+    number2 = str(round(price_changepercentage_7d, 2)) + '%'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+
+with fourth_kpi:
+    st.markdown("**Volume 24h**")
+    number3 = str(total_volume) + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
+
+fifth_kpi, sixth_kpi, seventh_kpi = st.columns(3)
+
+with fifth_kpi:
+    st.markdown("**Market Capitalization**")
+    number3 = str(market_cap) + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
+
+with sixth_kpi:
+    st.markdown("**Circulating Supply**")
+    number4 = str(int(circulating_supply)) + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
+
+with seventh_kpi:
+    st.markdown("**Fully Diluted Valuation**")
+    number5 = str(current_price * 100000000) + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number5}</h1>", unsafe_allow_html=True)
+
+
+# TODO AVAX data
+# first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi = st.columns(5)
+#
+# with first_kpi:
+#     st.markdown("**AVAX Current Price**")
+#     number1 = str(avax_current_price) + ' USD'
+#     st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+
 
 # convert 'Date' column from unix (in milliseconds) format to datetime format
 # df_vso['Date'] = pd.to_datetime(df_vso['Date'], unit='ms')
 # df_avax['Date'] = pd.to_datetime(df_avax['Date'], unit='ms')
 
-# plot token returns (percentage change)
-newnames = {'wide_variable_0': 'VSO', 'wide_variable_1': 'AVAX'}
 
-st.markdown("### Cumulative Token Returns")
+# plot token returns (percentage change)
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+
+# Price Charts
+st.markdown("## Price Charts")
+
 # plot token cumulative returns (cumulative percentage change)
+st.markdown("### VSO and AVAX Token Returns (cumulative percentage change)")
+newnames = {'wide_variable_0': 'VSO', 'wide_variable_1': 'AVAX'} # prepare newnames variable for line chart labels renaming later
 fig2 = px.line(df_token_prices,
              x = df_token_prices.index,
              y = [(df_token_prices['VSO'].pct_change()+1).cumprod(), (df_token_prices['AVAX'].pct_change()+1).cumprod()],
@@ -223,7 +166,8 @@ fig2.for_each_trace(lambda t: t.update(name = newnames[t.name],
                                      ))
 st.plotly_chart(fig2)
 
-st.markdown("### Token Returns (percentage change)")
+# plot token returns (percentage change)
+st.markdown("### VSO and AVAX Token Returns (percentage change)")
 
 fig3 = px.line(df_token_prices,
              x = df_token_prices.index,
@@ -242,3 +186,92 @@ fig3.for_each_trace(lambda t: t.update(name = newnames[t.name],
 st.plotly_chart(fig3)
 
 
+# Locked Tokens for Vesting
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## Locked Tokens for Vesting")
+
+first_kpi, second_kpi = st.columns(2)
+
+# define variables for internal an external locked tokens
+# TODO adjust static "today" date to dynamic "today"
+internal_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'Internal') &(df['Date of Unlock'] > '2021-10-17T00:00:00')].sum()
+external_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'External') &(df['Date of Unlock'] > '2021-10-17T00:00:00')].sum()
+unknown_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'Unknown') &(df['Date of Unlock'] > '2021-10-17T00:00:00')].sum()
+
+external_locked_total = external_locked + unknown_locked
+
+
+with first_kpi:
+    st.markdown("**Total Locked VSO - Internal Addresses**")
+    number1 = str(internal_locked) + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**Total Locked VSO - External Addresses**")
+    number2 = str(external_locked_total) + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+
+
+# Circulating Supply
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## Circulating Supply")
+
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+
+with first_kpi:
+    st.markdown("**Internal Addresses**")
+    number1 = 'NaN'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**External Addresses**")
+    number2 = 'NaN'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Farms**")
+    number3 = 'NaN'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
+
+with fourth_kpi:
+    st.markdown("**Pools**")
+    number4 = 'NaN'
+    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
+
+
+# VSO Unlcock Schedule
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## VSO Unlock Schedule")
+
+st.subheader('Dataset')
+st.write(df)
+
+
+# TODO add cumulative back to DataFrame
+# st.subheader('Cumulative VSO Unlocks per Date')
+# st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cumulative VSO Amount'])
+
+# old way of plotting unlocks
+pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
+
+# add bars
+st.subheader('VSO Unlocks per Date')
+
+
+fig = px.bar(pivot_table,
+             x = pivot_table.index,
+             y = [c for c in pivot_table.columns],
+             template = 'plotly_dark',
+             color_discrete_sequence = colors,
+             # title = 'VSO Unlocks by Date',
+             height=800,
+             width=2000
+             )
+
+fig.update_traces(marker_line_width=1.5)
+# fig.update_layout(barmode='stack')
+st.plotly_chart(fig)

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Fixed a few lines.">
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Added more market data and adjusted other stuff.">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StreamlitUnlocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/StreamlitUnlocks.py" afterDir="false" />
     </list>
@@ -215,7 +216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635085975722</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Added token return graphs.">
+      <created>1635098614801</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1635098614801</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -244,7 +252,9 @@
     <MESSAGE value="Working one." />
     <MESSAGE value="Added plotly chart to streamlit." />
     <MESSAGE value="Fixed a few lines." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed a few lines." />
+    <MESSAGE value="Added token return graphs." />
+    <MESSAGE value="Added more market data and adjusted other stuff." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added more market data and adjusted other stuff." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -256,8 +266,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/StreamlitUnlocks.py</url>
-          <line>43</line>
-          <option name="timeStamp" value="6" />
+          <line>207</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
