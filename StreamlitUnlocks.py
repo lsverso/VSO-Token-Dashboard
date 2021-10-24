@@ -9,10 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
-# df1 = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
 # df1 = pd.read_csv(r'C:\Users\L.SCHEUER\OneDrive - Zurich Insurance\Escritorio\VSO Unlocks Not Ordered New Table.csv')
-
-# df = pd.read_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered 20211017.csv')
+# print(df1.to_dict())
 
 df = pd.DataFrame.from_dict({'VSO Amount': {0: 250000, 1: 250000, 2: 250000, 3: 250000, 4: 916666, 5: 916666, 6: 916666, 7: 916666, 8: 208333, 9: 208333, 10: 208333, 11: 208333, 12: 1, 13: 1, 14: 208333, 15: 208333, 16: 208333, 17: 208333, 18: 10400000, 19: 33333, 20: 33333, 21: 33333, 22: 33333, 23: 170833, 24: 16666, 25: 12500, 26: 8333, 27: 208333, 28: 250000, 29: 916666, 30: 208333, 31: 158333, 32: 791666, 33: 33333, 34: 20833, 35: 170833, 36: 16666, 37: 12500, 38: 8333, 39: 208333, 40: 250000, 41: 916666,42: 208333, 43: 158333, 44: 791666, 45: 33333, 46: 170833, 47: 16666, 48: 12500, 49: 8333, 50: 208333, 51: 250000, 52: 916666, 53: 208333, 54: 158333, 55: 791666, 56: 33333, 57: 170833, 58: 16666, 59: 12500, 60: 8333, 61: 208333, 62: 250000, 63: 916666, 64: 208333, 65: 158333, 66: 791666, 67: 33333, 68: 170833, 69: 16666, 70: 12500, 71: 8333, 72: 208333, 73: 250000, 74: 916666, 75: 208333, 76: 158333, 77: 791666, 78: 33333, 79: 170833, 80: 16666, 81: 12500, 82: 8333, 83: 208333, 84:250000, 85: 916666, 86: 208333, 87: 158333, 88: 791666, 89: 33333, 90: 170833, 91: 16666, 92: 12500, 93: 8333, 94: 208333, 95: 250000, 96: 916666, 97: 208333, 98: 158333, 99: 791666, 100: 33333, 101: 170833, 102: 16666, 103: 12500, 104: 8333, 105: 208333, 106: 250000, 107: 916666, 108: 208333, 109: 158333, 110: 3958338, 111: 33335, 112: 170833, 113: 16666, 114: 12500, 115: 8333, 116: 208333, 117: 170833, 118: 16666, 119: 12500, 120: 8333, 121: 208333, 122: 170833, 123: 16666, 124: 12500, 125: 8333, 126: 208333, 127: 170833, 128: 16666, 129: 12500, 130: 8333, 131: 208333},
                              'Days Until Unlock': {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 0, 23: 14, 24: 14, 25: 14, 26: 14, 27: 14, 28: 14, 29: 14, 30: 14, 31: 15, 32: 15, 33: 15, 34: 15, 35: 44, 36: 44, 37: 44, 38: 44, 39: 44, 40: 44, 41: 44, 42: 44, 43: 45, 44: 45, 45: 45, 46: 75, 47: 75, 48: 75, 49: 75, 50: 75, 79: 165, 80: 165, 81: 165, 82: 165, 83: 165, 84: 165, 85: 165, 86: 165, 87: 166, 88: 166, 89: 166, 90: 195, 91: 195, 92: 195, 93: 195, 94: 195, 95: 195, 96: 195, 97: 195, 98: 196, 99: 196, 100: 196, 101: 226, 102: 226, 103: 226, 104: 226, 105: 226, 106: 226, 107: 226, 108: 226, 109: 227, 110: 227, 111: 227, 112: 256, 113: 256, 114: 256, 115: 256, 116: 256, 117: 287, 118: 287, 119: 287, 120: 287, 121: 287, 122: 318, 123: 318, 124: 318, 125: 318, 126: 318, 127: 348, 128: 348, 129: 348, 130: 348, 131: 348},
@@ -27,7 +25,7 @@ pivot_table = df.pivot_table(index='Date of Unlock', columns='Internal or Extern
 
 # pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
 # st.pyplot(pivot_chart)
-# print(df1.to_dict())
+
 
 # explicitly create DataFrame with Unlock Schedule as of October 17th 2021 (static dataset/dataframe)
 # df = pd.DataFrame.from_dict({'VSO Amount': {0: 16866662, 1: 1791664, 2: 1004165, 3: 1791664, 4: 983332, 5: 1791664, 6: 983332, 7: 1791664, 8: 983332, 9: 1791664, 10: 983332, 11: 1791664, 12: 983332, 13: 1791664, 14: 983332, 15: 1791664, 16: 4150006, 17: 416665, 18: 416665, 19: 416665, 20: 416665},
@@ -50,11 +48,6 @@ market_cap = url.json()[0]['market_cap']
 circulating_supply = url.json()[0]['circulating_supply']
 fdv = url.json()[0]['fully_diluted_valuation']
 total_volume = url.json()[0]['total_volume']
-
-
-# calling the API directly instead of using requests and url
-# cg = CoinGeckoAPI()
-# print(cg.get_coins_markets(ids='verso', vs_currency='usd'))
 
 
 # page layout
@@ -152,52 +145,36 @@ st.markdown("## VSO Unlock Schedule")
 st.subheader('Dataset')
 st.write(df)
 
-st.subheader('VSO Unlocks per Date')
-st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['VSO Amount'])
+# old unlocks by date chart (streamlit chart)
+# st.subheader('VSO Unlocks per Date')
+# st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['VSO Amount'])
 
 # TODO add cumulative back to DataFrame
 # st.subheader('Cumulative VSO Unlocks per Date')
 # st.bar_chart(df.rename(columns={'Date of Unlock':'index'}).set_index('index')['Cumulative VSO Amount'])
 
-# price charts section
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## VSO and AVAX Price Charts")
-
-
-# fig, ax = plt.subplots()
-
-# fig = px.scatter(df, x='Date of Unlock', y='',
-#                  color = 'company',
-#                  color_discrete_sequence=['Blue', 'Green'])
-# fig.show()
 pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
-#
-# fig = px.bar(pivot_table)
-# fig.update_layout(barmode = 'stack')#, x="nation", y="count", color="medal", title="Long-Form Input")
-# fig.show()
-
-# pivot_table.unstack().plot(kind='bar', stacked=True)
-# plt.show()
-
-# fig = go.Figure(data=pivot_table.unstack())
-# # Change the bar mode
-# fig.update_layout(barmode='stack')
-# fig.show()
-
-# fig = make_subplots(rows=1, cols=1)
 
 # add bars
-df.reset_index()
+st.subheader('VSO Unlocks per Date')
+
 colors = px.colors.qualitative.T10
 fig = px.bar(pivot_table,
              x = pivot_table.index,
              y = [c for c in pivot_table.columns],
              template = 'plotly_dark',
              color_discrete_sequence = colors,
-             title = 'VSO Unlocks by Date',
+             # title = 'VSO Unlocks by Date',
              height=800,
              width=2000
              )
+
+fig.update_traces(marker_line_width=1.5)
 # fig.update_layout(barmode='stack')
 st.plotly_chart(fig)
+
+# price charts section
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## VSO and AVAX Price Charts")
+
