@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Changed intepreter.">
-      <change beforePath="$PROJECT_DIR$/.idea/VSO-Token-Unlocks.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/VSO-Token-Unlocks.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Changed intepreter." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,7 +27,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../VSO-Price-Correlation/VSOPriceCorrelation.py" />
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunManager" selected="Python.StreamlitUnlocks">
     <configuration name="StreamlitUnlocks" type="PythonConfigurationType" factoryName="Python">
@@ -279,7 +275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635146243342</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Changed intepreter.">
+      <created>1635146609389</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1635146609389</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TerminalProjectNonSharedOptionsProvider">
