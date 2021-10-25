@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Changed intepreter to venv (2).">
+    <list default="true" id="d53e5070-54de-4846-82e1-a53de1fd2710" name="Changes" comment="Changed intepreter to venvstreamlit.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StreamlitUnlocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/StreamlitUnlocks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +236,21 @@
       <option name="project" value="LOCAL" />
       <updated>1635110197506</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Changed intepreter to venvstreamlit.">
+      <created>1635110749166</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1635110749166</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Changed intepreter to venvstreamlit.">
+      <created>1635110770487</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1635110770487</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -268,7 +283,8 @@
     <MESSAGE value="Added more market data and adjusted other stuff." />
     <MESSAGE value="Added Locked Tokens for Vesting correct numbers." />
     <MESSAGE value="Changed intepreter to venv (2)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed intepreter to venv (2)." />
+    <MESSAGE value="Changed intepreter to venvstreamlit." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed intepreter to venvstreamlit." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

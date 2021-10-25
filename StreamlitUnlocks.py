@@ -1,7 +1,4 @@
 import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import requests
 import streamlit as st
