@@ -102,24 +102,24 @@ with third_kpi:
 
 with fourth_kpi:
     st.markdown("**Volume 24h**")
-    number3 = str(total_volume) + ' USD'
+    number3 = str(f'{total_volume:,}') + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
 
 fifth_kpi, sixth_kpi, seventh_kpi = st.columns(3)
 
 with fifth_kpi:
     st.markdown("**Market Capitalization**")
-    number3 = str(market_cap) + ' USD'
+    number3 = str(f'{market_cap:,}') + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
 
 with sixth_kpi:
     st.markdown("**Circulating Supply**")
-    number4 = str(int(circulating_supply)) + ' VSO'
+    number4 = str(f'{int(circulating_supply):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
 
 with seventh_kpi:
     st.markdown("**Fully Diluted Valuation**")
-    number5 = str(current_price * 100000000) + ' USD'
+    number5 = str(f'{int(current_price * 100000000):,}') + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number5}</h1>", unsafe_allow_html=True)
 
 
@@ -201,12 +201,12 @@ external_locked_total = external_locked + unknown_locked
 
 with first_kpi:
     st.markdown("**Total Locked VSO - Internal Addresses**")
-    number1 = str(internal_locked) + ' VSO'
+    number1 = str(f'{internal_locked:,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**Total Locked VSO - External Addresses**")
-    number2 = str(external_locked_total) + ' VSO'
+    number2 = str(f'{external_locked_total:,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
 
 
