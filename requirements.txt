@@ -5,3 +5,5 @@ streamlit
 plotly
 pycoingecko
 matplotlib
+bs4
+selenium

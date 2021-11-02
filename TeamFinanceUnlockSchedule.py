@@ -14,12 +14,12 @@ import pandas as pd
 # open the url ina  web browser (Chrome)
 browser = webdriver.Chrome()
 browser.get("https://team.finance/view-coin/0x846D50248BAf8b7ceAA9d9B53BFd12d7D7FBB25a?name=VersoToken&symbol=VSO")
-
+time.sleep(30)
 
 # parse web page data
 c = browser.page_source
 soup = BeautifulSoup(c, 'html.parser')
-time.sleep(2)
+time.sleep(10)
 
 
 # read entire block of unlocks (calling the block "division")
@@ -177,17 +177,9 @@ df_grouped_days_until_unlock['Days Until Unlock'] = df_grouped_days_until_unlock
 # add cumulative VSO unlocks column (dataframe remains ordered by Days Until Unlock)
 df_grouped_days_until_unlock['Cummulative VSO Unlocks'] = df_grouped_days_until_unlock['VSO Amount'].cumsum()
 
-# save df_formatted into a .csv file within a .zip file
-compression_opts = dict(method='zip',
-                        archive_name='VSO Unlocks Not Ordered 20211017.csv')
-df_formatted.to_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered 20211017.zip',
-                    index=False,
-                    compression=compression_opts)
 
+# save df_formatted into a .csv file within a .zip file
+df_formatted.to_csv(r'F:\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Not Ordered 20211102.csv', index=False)
 
 # save the df_grouped_days_until_unlock into a .csv file within a .zip file
-compression_opts = dict(method='zip',
-                        archive_name='VSO Unlocks Grouped by Days Until Unlock 20211017.csv')
-df_grouped_days_until_unlock.to_csv(r'C:\Users\L.SCHEUER\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211017.zip',
-                                    index=False,
-                                    compression=compression_opts)
+df_grouped_days_until_unlock.to_csv(r'F:\PycharmProjects\VSO-Token-Unlocks\VSO Unlocks Grouped by Days Until Unlock 20211102.csv', index=False)
