@@ -6,6 +6,7 @@ import numpy as np
 from pycoingecko import CoinGeckoAPI
 
 
+
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
 # df1 = pd.read_csv(r'C:\Users\L.SCHEUER\OneDrive - Zurich Insurance\Escritorio\VSO Unlocks Not Ordered New Table.csv')
 # print(df1.to_dict())
@@ -54,22 +55,26 @@ total_volume = url.json()[0]['total_volume']
 
 # calling VSO and AVAX pricing data from coingecko's API directly instead of using requests and url
 cg = CoinGeckoAPI()
-vso_prices = cg.get_coin_market_chart_by_id(id='verso', vs_currency='usd', days=30)
-avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd', days=30)
+vso_prices = cg.get_coin_market_chart_by_id(id='verso', vs_currency='usd', days=15)
+avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd', days=15)
 
-# create date and price dataframes for each token
+
+# create date and price dataframes for each token pair
 df_vso = pd.DataFrame(vso_prices['prices'], columns=['Date', 'Price'])
 df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
+df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
+
 
 # create date-indexed df for all tokens (one token per column)
-df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO': df_vso['Price'], 'AVAX': df_avax['Price']})
+df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO/USD': df_vso['Price'], 'AVAX/USD': df_avax['Price'], 'VSO/AVAX': df_vso_avax['Price']})
 df_token_prices = df_token_prices.set_index('Date')
 df_token_prices.index = pd.to_datetime(df_token_prices.index, unit='ms')
+print(df_token_prices)
 
 
 # calculate 7-day price percentage change
 pd.set_option("display.max_rows", None, "display.max_columns", None)
-vso_price_change_percentage_7_days = df_token_prices['VSO'].pct_change()
+vso_price_change_percentage_7_days = df_token_prices['VSO/USD'].pct_change()
 
 
 # prepare variables for plotting later
@@ -148,12 +153,33 @@ st.markdown("<hr/>", unsafe_allow_html=True)
 # Price Charts
 st.markdown("## Price Charts")
 
+st.markdown("### VSO/AVAX Price Chart")
+
+newnames = {'wide_variable_0': 'VSO/USD', 'wide_variable_1': 'AVAX/USD'} # prepare newnames variable for line chart labels renaming later
+fig = px.line(df_token_prices,
+             x = df_token_prices.index,
+             y = df_token_prices['VSO/AVAX'],
+             template = 'plotly_dark',
+             color_discrete_sequence = colors,
+             # title = 'VSO Unlocks by Date',
+             height=800,
+             width=2000
+             )
+
+# fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
+#                                       legendgroup = newnames[t.name],
+#                                       hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
+#                                      ))
+st.plotly_chart(fig)
+
+
+
 # plot token cumulative returns (cumulative percentage change)
 st.markdown("### VSO and AVAX Token Returns (cumulative percentage change)")
-newnames = {'wide_variable_0': 'VSO', 'wide_variable_1': 'AVAX'} # prepare newnames variable for line chart labels renaming later
+
 fig2 = px.line(df_token_prices,
              x = df_token_prices.index,
-             y = [(df_token_prices['VSO'].pct_change()+1).cumprod(), (df_token_prices['AVAX'].pct_change()+1).cumprod()],
+             y = [(df_token_prices['VSO/USD'].pct_change()+1).cumprod(), (df_token_prices['AVAX/USD'].pct_change()+1).cumprod()],
              template = 'plotly_dark',
              color_discrete_sequence = colors,
              # title = 'VSO Unlocks by Date',
@@ -172,7 +198,7 @@ st.markdown("### VSO and AVAX Token Returns (percentage change)")
 
 fig3 = px.line(df_token_prices,
              x = df_token_prices.index,
-             y = [df_token_prices['VSO'].pct_change(), df_token_prices['AVAX'].pct_change()],
+             y = [df_token_prices['VSO/USD'].pct_change(), df_token_prices['AVAX/USD'].pct_change()],
              template = 'plotly_dark',
              color_discrete_sequence = colors,
              # title = 'VSO Unlocks by Date',
