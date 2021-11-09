@@ -1,9 +1,12 @@
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import pandas as pd
 import requests
 import streamlit as st
 import numpy as np
 from pycoingecko import CoinGeckoAPI
+
 
 
 
@@ -26,24 +29,9 @@ pivot_table = df.pivot_table(index=['Date of Unlock', 'Internal or External'], v
 
 pivot_table = df.pivot_table(index='Date of Unlock', columns='Internal or External', values='VSO Amount', aggfunc='sum', fill_value=0)
 
-# pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
-# st.pyplot(pivot_chart)
-
-
-# explicitly create DataFrame with Unlock Schedule as of October 17th 2021 (static dataset/dataframe)
-# df = pd.DataFrame.from_dict({'VSO Amount': {0: 16866662, 1: 1791664, 2: 1004165, 3: 1791664, 4: 983332, 5: 1791664, 6: 983332, 7: 1791664, 8: 983332, 9: 1791664, 10: 983332, 11: 1791664, 12: 983332, 13: 1791664, 14: 983332, 15: 1791664, 16: 4150006, 17: 416665, 18: 416665, 19: 416665, 20: 416665},
-#                              'Days Until Unlock': {0: 0, 1: 14, 2: 15, 3: 44, 4: 45, 5: 75, 6: 76, 7: 106, 8: 107, 9: 134, 10: 135, 11: 165, 12: 166, 13: 195, 14: 196, 15: 226, 16: 227, 17: 256, 18: 287, 19: 318, 20: 348},
-#                              'Date of Unlock': {0: '10/17/2021', 1: '10/31/2021', 2: '11/1/2021', 3: '11/30/2021', 4: '12/1/2021', 5: '12/31/2021', 6: '1/1/2022', 7: '1/31/2022', 8: '2/1/2022', 9: '2/28/2022', 10: '3/1/2022', 11: '3/31/2022', 12: '4/1/2022', 13: '4/30/2022', 14: '5/1/2022', 15: '5/31/2022', 16: '6/1/2022', 17: '6/30/2022', 18: '7/31/2022', 19: '8/31/2022', 20: '9/30/2022'},
-#                              'Cumulative VSO Amount': {0: 16866662, 1: 18658326, 2: 19662491, 3: 21454155, 4: 22437487, 5: 24229151, 6: 25212483, 7: 27004147, 8: 27987479, 9: 29779143, 10: 30762475, 11: 32554139, 12: 33537471, 13: 35329135, 14: 36312467, 15: 38104131, 16: 42254137, 17: 42670802, 18: 43087467, 19: 43504132, 20: 43920797}})
-
-
-# change data type of Date of Unlock Column to datetime
-# df['Date of Unlock'] = pd.to_datetime(df['Date of Unlock'])
-
 
 # get market data from coingecko's API and assign values to variables
 url = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=verso&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=7d', headers={'accept':'application/json'})
-# url = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=verso&order=market_cap_desc&per_page=100&page=1&sparkline=false', headers={'accept':'application/json'})
 current_price = url.json()[0]['current_price']
 price_change_percentage_24h = url.json()[0]['price_change_percentage_24h']
 price_changepercentage_7d = url.json()[0]['price_change_percentage_7d_in_currency']
@@ -61,7 +49,7 @@ avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd'
 
 # create date and price dataframes for each token pair
 df_vso = pd.DataFrame(vso_prices['prices'], columns=['Date', 'Price'])
-df_avax = pd.DataFrame(avax_prices['prices'][:-2], columns=['Date', 'Price'])
+df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
 df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
 
 
@@ -97,39 +85,45 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, = st.columns(4)
 with first_kpi:
     st.markdown("**VSO Current Price**")
     number1 = str(current_price) + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**Price Change 24h**")
     number2 = str(round(price_change_percentage_24h, 2)) + '%'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
     st.markdown("**Price Change 7d**")
     number2 = str(round(price_changepercentage_7d, 2)) + '%'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
 
 with fourth_kpi:
     st.markdown("**Volume 24h**")
     number3 = str(f'{total_volume:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
+
 
 fifth_kpi, sixth_kpi, seventh_kpi = st.columns(3)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
 
 with fifth_kpi:
     st.markdown("**Market Capitalization**")
     number3 = str(f'{market_cap:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 with sixth_kpi:
     st.markdown("**Circulating Supply**")
     number4 = str(f'{int(circulating_supply):,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number4}</h1>", unsafe_allow_html=True)
 
 with seventh_kpi:
     st.markdown("**Fully Diluted Valuation**")
     number5 = str(f'{int(current_price * 100000000):,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number5}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number5}</h1>", unsafe_allow_html=True)
 
 
 # TODO AVAX data
@@ -155,6 +149,45 @@ fig = px.line(df_token_prices,
              )
 
 st.plotly_chart(fig)
+
+
+
+st.markdown("### VSO/AVAX Price Chart")
+
+# Create figure with secondary y-axis
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# Add traces
+fig.add_trace(
+    go.Scatter(x=df_token_prices.index, y=df_token_prices['VSO/AVAX'], name="VSO/AVAX"),
+    secondary_y=False,
+)
+
+fig.add_trace(
+    go.Scatter(x=df_token_prices.index, y=df_token_prices['VSO/USD'], name="VSO/USD"),
+    secondary_y=True,
+)
+
+# Add figure title
+fig.update_layout(
+    title_text="Double Y Axis Example",
+    height=800,
+    width=1500
+)
+
+# Set x-axis title
+fig.update_xaxes(title_text="Date")
+
+# Set y-axes titles
+fig.update_yaxes(title_text="VSO/AVAX Price", secondary_y=False)
+fig.update_yaxes(title_text="VSO/USD Price", secondary_y=True)
+
+st.plotly_chart(fig)
+
+
+
+
+
 
 
 # plot token cumulative returns (cumulative percentage change)
@@ -243,12 +276,12 @@ first_kpi, second_kpi = st.columns(2)
 with first_kpi:
     st.markdown("**Total Locked VSO - Internal Addresses**")
     number1 = str(f'{internal_locked:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**Total Locked VSO - External Addresses**")
     number2 = str(f'{external_locked_total:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
 
 
 st.text("")
@@ -265,22 +298,22 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 with first_kpi:
     st.markdown("**Internal Addresses**")
     number1 = 'NaN'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**External Addresses**")
     number2 = 'NaN'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
     st.markdown("**Farms**")
     number3 = 'NaN'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number3}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 with fourth_kpi:
     st.markdown("**Pools**")
     number4 = 'NaN'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number4}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number4}</h1>", unsafe_allow_html=True)
 
 
 # VSO Unlock Schedule
@@ -298,14 +331,17 @@ st.write(df)
 
 # old way of plotting unlocks
 pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
+print(pivot_chart)
 
 # add bars
 st.subheader('VSO Unlocks per Date')
 
+pivot_table_subset = pivot_table[pivot_table.index > '2021-11-02T00:00:00']
 
-fig = px.bar(pivot_table,
-             x = pivot_table.index,
-             y = [c for c in pivot_table.columns],
+
+fig = px.bar(pivot_table_subset,
+             x = pivot_table_subset.index,
+             y = [c for c in pivot_table_subset.columns],
              template = 'plotly_dark',
              color_discrete_sequence = colors,
              # title = 'VSO Unlocks by Date',
@@ -371,18 +407,18 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 with first_kpi:
     st.markdown("**VSO Amount**")
     number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**ELK Amount**")
     number1 = str(f'{balance_elk:,}') + ' ELK'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
     st.markdown("**Total Liquidity in USD**")
     total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_elk * quote_rate_elk)))
     number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 
 # load VSO-WAVAX Pool on Pangolin from covalenthq API
@@ -422,18 +458,18 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 with first_kpi:
     st.markdown("**VSO Amount**")
     number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**WAVAX Amount**")
     number1 = str(f'{balance_wavax:,}') + ' WAVAX'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
     st.markdown("**Total Liquidity in USD**")
     total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_wavax * quote_rate_wavax)))
     number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 
 # load PNG-VSO Pool on Pangolin from covalenthq API
@@ -474,18 +510,18 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 with first_kpi:
     st.markdown("**VSO Amount**")
     number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**PNG Amount**")
     number1 = str(f'{balance_png:,}') + ' PNG'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
     st.markdown("**Total Liquidity in USD**")
     total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_png * quote_rate_png)))
     number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 
 # load VSO-WAVAX Pool on Lydia Finance from covalenthq API
@@ -525,18 +561,18 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 with first_kpi:
     st.markdown("**VSO Amount**")
     number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with second_kpi:
     st.markdown("**WAVAX Amount**")
     number1 = str(f'{balance_wavax:,}') + ' WAVAX'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
     st.markdown("**Total Liquidity in USD**")
     total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_wavax * quote_rate_wavax)))
     number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: red;'>{number1}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 
 # load VSO-WAVAX Pool on Trader Joe from covalenthq API
