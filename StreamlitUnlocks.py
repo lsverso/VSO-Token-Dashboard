@@ -61,7 +61,7 @@ avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd'
 
 # create date and price dataframes for each token pair
 df_vso = pd.DataFrame(vso_prices['prices'], columns=['Date', 'Price'])
-df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
+df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
 df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
 
 
