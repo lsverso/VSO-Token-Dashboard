@@ -63,7 +63,7 @@ except:
 df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO/USD': df_vso['Price'], 'AVAX/USD': df_avax['Price'], 'VSO/AVAX': df_vso_avax['Price']})
 df_token_prices = df_token_prices.set_index('Date')
 df_token_prices.index = pd.to_datetime(df_token_prices.index, unit='ms')
-print(df_token_prices)
+# print(df_token_prices)
 
 
 # calculate 7-day price percentage change
@@ -170,16 +170,16 @@ fig.add_trace(
 
 # Add figure title
 fig.update_layout(
-    height=800,
-    width=1500
+    height=400,
+    width=750
 )
 
 # Set x-axis title
 fig.update_xaxes(title_text="Date", showgrid=False)
 
 # Set y-axes titles
-fig.update_yaxes(title_text="VSO/AVAX Price", secondary_y=False)
-fig.update_yaxes(title_text="VSO/USD Price", secondary_y=True, showgrid=False)
+fig.update_yaxes(title_text="VSO/USD Price", secondary_y=False)
+fig.update_yaxes(title_text="VSO/AVAX Price", secondary_y=True, showgrid=False)
 
 st.plotly_chart(fig)
 
@@ -197,8 +197,8 @@ fig2 = px.line(df_token_prices,
              y = [(df_token_prices['VSO/USD'].pct_change()+1).cumprod(), (df_token_prices['AVAX/USD'].pct_change()+1).cumprod()],
              template = 'plotly_dark',
              color_discrete_sequence = colors,
-             height=800,
-             width=1500
+             height=400,
+             width=750
              )
 
 fig2.for_each_trace(lambda t: t.update(name = newnames[t.name],
@@ -216,8 +216,8 @@ fig3 = px.line(df_token_prices,
              template = 'plotly_dark',
              color_discrete_sequence = colors,
              # title = 'VSO Unlocks by Date',
-             height=800,
-             width=1500
+             height=400,
+             width=750
              )
 
 fig3.for_each_trace(lambda t: t.update(name = newnames[t.name],
@@ -330,7 +330,7 @@ st.write(df)
 
 # old way of plotting unlocks
 pivot_chart = pivot_table.unstack().plot(kind='bar', stacked=True)
-print(pivot_chart)
+# print(pivot_chart)
 
 # add bars
 st.subheader('VSO Unlocks per Date')
@@ -344,8 +344,8 @@ fig = px.bar(pivot_table_subset,
              template = 'plotly_dark',
              color_discrete_sequence = colors,
              # title = 'VSO Unlocks by Date',
-             height=800,
-             width=1500
+             height=400,
+             width=750
              )
 
 fig.update_traces(marker_line_width=1.5)
@@ -600,6 +600,263 @@ for item in items:
         continue
 
 
+# VSO Pool2s Numbers
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## VSO Farms and Staking Pools")
+# load parameters for the covalenthq API url
+API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
+chain_id = 43114
+contract_address = '0xda420bd5f676da1c8cb620313b0ba6d93e963e5f'
+page_size = 200_000
+payload = {
+                "key": API_KEY,
+                "page-size": page_size,
+                "block-signed-at-asc": True
+            }
+
+
+
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/transactions_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+transaction_list = []
+# load data for pool contract address
+items = url.json()['data']['items']
+for item in items:
+    log_events = item['log_events']
+
+    # if the transaction is not a VSO transaction, skip to next log_event
+    for log_event in log_events:
+        if log_event['sender_contract_ticker_symbol'] != 'VSO':
+            continue
+
+        # create one dictionary per details/parameters of each transaction
+        tx_params = {}
+
+        block_height = log_event['block_height']
+        tx_params['block_height'] = block_height
+
+        tx_hash = log_event['tx_hash']
+        tx_params['tx_hash'] = tx_hash
+        # print(block_height, tx_hash)
+
+        decoded = log_event['decoded']
+        params = decoded['params']
+
+        # some params objects are TypeNone, so skip those
+        if params is None:
+            continue
+
+        # create for loop for each parameter (from (address), to (address), amount (value of VSO transaction))
+        for param_dict in params:
+            name = param_dict['name']
+
+            if name == 'from':
+                tx_params['from'] = param_dict['value']
+                continue
+            elif name == 'to':
+                tx_params['to'] = param_dict['value']
+                continue
+            elif name == 'value':
+                tx_params['amount'] = param_dict['value']
+
+            # for each created dictionary of transaction parameters, add it to the empty list created in the beginning
+            transaction_list.append(tx_params)
+
+df = pd.DataFrame(transaction_list)
+
+# reformat 'amount' column into floats
+df['amount'] = [float("{:.2f}".format(float(item) / 10 ** 18)) for item in df['amount']]
+
+# print(df.dropna().head())
+
+grouped_txs = df['amount'].groupby(df['to']).sum()
+total_outflows = []
+for row in grouped_txs:
+    if row > 1000000:
+        total_inflows = row
+    else:
+        total_outflows.append(row)
+
+total_outflows = sum(total_outflows)
+balance = total_inflows - total_outflows
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+st.markdown("### VSO 90-Day Lockup Staking Pool Trustswap")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{round(balance, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+
+
+
+
+
+# load parameters for the covalenthq API url
+API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
+chain_id = 43114
+contract_address = '0xDa719fE5443a2EFD5a61Ceb11fcb2a02FCeb8923'
+page_size = 200_000
+payload = {
+                "key": API_KEY,
+                "page-size": page_size,
+                "block-signed-at-asc": True
+            }
+
+
+
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/transactions_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+transaction_list = []
+# load data for pool contract address
+items = url.json()['data']['items']
+for item in items:
+    log_events = item['log_events']
+
+    # if the transaction is not a VSO transaction, skip to next log_event
+    for log_event in log_events:
+        if log_event['sender_contract_ticker_symbol'] != 'VSO':
+            continue
+
+        # create one dictionary per details/parameters of each transaction
+        tx_params = {}
+
+        block_height = log_event['block_height']
+        tx_params['block_height'] = block_height
+
+        tx_hash = log_event['tx_hash']
+        tx_params['tx_hash'] = tx_hash
+        # print(block_height, tx_hash)
+
+        decoded = log_event['decoded']
+        params = decoded['params']
+
+        # some params objects are TypeNone, so skip those
+        if params is None:
+            continue
+
+        # create for loop for each parameter (from (address), to (address), amount (value of VSO transaction))
+        for param_dict in params:
+            name = param_dict['name']
+
+            if name == 'from':
+                tx_params['from'] = param_dict['value']
+                continue
+            elif name == 'to':
+                tx_params['to'] = param_dict['value']
+                continue
+            elif name == 'value':
+                tx_params['amount'] = param_dict['value']
+
+            # for each created dictionary of transaction parameters, add it to the empty list created in the beginning
+            transaction_list.append(tx_params)
+
+df = pd.DataFrame(transaction_list)
+
+# reformat 'amount' column into floats
+df['amount'] = [float("{:.2f}".format(float(item) / 10 ** 18)) for item in df['amount']]
+
+# print(df.dropna().head())
+
+grouped_txs = df['amount'].groupby(df['to']).sum()
+total_outflows = []
+for row in grouped_txs:
+    if row > 1000000:
+        total_inflows = row
+    else:
+        total_outflows.append(row)
+
+total_outflows = sum(total_outflows)
+balance = total_inflows - total_outflows
+
+
+st.markdown("### VSO Staking Pool Trustswap")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{round(balance, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 print('hi')
 
 
+
+
+# load SWAP-VSO Staking Pool on Trustswap
+contract_address = '0x454d379Ba89EB7BdA6AAA0420B056bD03fcF012B'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'SWAP.e':
+        balance_swap = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_swap = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_vso = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+st.markdown("### SWAP-VSO Staking Pool on Trustswap")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+print('hi')
+
+
+# load Verso Staking Pool on Trustswap
+contract_address = '0xDa719fE5443a2EFD5a61Ceb11fcb2a02FCeb8923'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'SWAP.e':
+        balance_swap = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_swap = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_vso = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+st.markdown("### SWAP-VSO Staking Pool on Trustswap")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+print('hi')
