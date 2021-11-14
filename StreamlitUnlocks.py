@@ -41,8 +41,8 @@ total_volume = url.json()[0]['total_volume']
 
 # calling VSO and AVAX pricing data from coingecko's API directly instead of using requests and url
 cg = CoinGeckoAPI()
-vso_prices = cg.get_coin_market_chart_by_id(id='verso', vs_currency='usd', days=15)
-avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd', days=15)
+vso_prices = cg.get_coin_market_chart_by_id(id='verso', vs_currency='usd', days=30)
+avax_prices = cg.get_coin_market_chart_by_id(id='avalanche-2', vs_currency='usd', days=30)
 
 
 # create date and price dataframes for each token pair
@@ -93,15 +93,24 @@ with first_kpi:
     number1 = str(current_price) + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
+
 with second_kpi:
     st.markdown("**Price Change 24h**")
     number2 = str(round(price_change_percentage_24h, 2)) + '%'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
+    if price_change_percentage_24h >= 0:
+        st.markdown(f"<h1 style='text-align: left; color: darkgreen;'>{number2}</h1>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+
 
 with third_kpi:
     st.markdown("**Price Change 7d**")
     number2 = str(round(price_changepercentage_7d, 2)) + '%'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
+    if price_changepercentage_7d >= 0:
+        st.markdown(f"<h1 style='text-align: left; color: green;'>{number2}</h1>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
+
 
 with fourth_kpi:
     st.markdown("**Volume 24h**")
@@ -139,54 +148,38 @@ st.markdown("<hr/>", unsafe_allow_html=True)
 
 
 # Price Charts
-st.markdown("## Price Charts")
-
-st.markdown("### VSO/AVAX Price Chart")
+st.markdown("## VSO Charts")
 
 newnames = {'wide_variable_0': 'VSO/USD', 'wide_variable_1': 'AVAX/USD'} # prepare newnames variable for line chart labels renaming later
-fig = px.line(df_token_prices,
-             x = df_token_prices.index,
-             y = df_token_prices['VSO/AVAX'],
-             template = 'plotly_dark',
-             color_discrete_sequence = colors,
-             # title = 'VSO Unlocks by Date',
-             height=800,
-             width=1500
-             )
 
-st.plotly_chart(fig)
-
-
-
-st.markdown("### VSO/AVAX Price Chart")
+st.markdown("### Price Chart")
 
 # Create figure with secondary y-axis
-fig = make_subplots(specs=[[{"secondary_y": True}]])
+fig = make_subplots(specs=[[{"secondary_y": True}]], print_grid=False)
 
 # Add traces
 fig.add_trace(
-    go.Scatter(x=df_token_prices.index, y=df_token_prices['VSO/AVAX'], name="VSO/AVAX"),
+    go.Scatter(x=df_token_prices.index, y=df_token_prices['VSO/USD'], name="VSO/USD"),
     secondary_y=False,
 )
 
 fig.add_trace(
-    go.Scatter(x=df_token_prices.index, y=df_token_prices['VSO/USD'], name="VSO/USD"),
-    secondary_y=True,
+    go.Scatter(x=df_token_prices.index, y=df_token_prices['VSO/AVAX'], name="VSO/AVAX"),
+    secondary_y=True
 )
 
 # Add figure title
 fig.update_layout(
-    title_text="Double Y Axis Example",
     height=800,
     width=1500
 )
 
 # Set x-axis title
-fig.update_xaxes(title_text="Date")
+fig.update_xaxes(title_text="Date", showgrid=False)
 
 # Set y-axes titles
 fig.update_yaxes(title_text="VSO/AVAX Price", secondary_y=False)
-fig.update_yaxes(title_text="VSO/USD Price", secondary_y=True)
+fig.update_yaxes(title_text="VSO/USD Price", secondary_y=True, showgrid=False)
 
 st.plotly_chart(fig)
 
@@ -197,7 +190,7 @@ st.plotly_chart(fig)
 
 
 # plot token cumulative returns (cumulative percentage change)
-st.markdown("### VSO and AVAX Token Returns (cumulative percentage change)")
+st.markdown("### Token Returns (cumulative percentage change)")
 
 fig2 = px.line(df_token_prices,
              x = df_token_prices.index,
@@ -215,7 +208,7 @@ fig2.for_each_trace(lambda t: t.update(name = newnames[t.name],
 st.plotly_chart(fig2)
 
 # plot token returns (percentage change)
-st.markdown("### VSO and AVAX Token Returns (percentage change)")
+st.markdown("### Token Returns (percentage change)")
 
 fig3 = px.line(df_token_prices,
              x = df_token_prices.index,
