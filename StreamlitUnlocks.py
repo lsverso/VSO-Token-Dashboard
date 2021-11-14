@@ -98,7 +98,7 @@ with second_kpi:
     st.markdown("**Price Change 24h**")
     number2 = str(round(price_change_percentage_24h, 2)) + '%'
     if price_change_percentage_24h >= 0:
-        st.markdown(f"<h1 style='text-align: left; color: darkgreen;'>{number2}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<h1 style='text-align: left; color: limegreen;'>{number2}</h1>", unsafe_allow_html=True)
     else:
         st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
 
@@ -107,7 +107,7 @@ with third_kpi:
     st.markdown("**Price Change 7d**")
     number2 = str(round(price_changepercentage_7d, 2)) + '%'
     if price_changepercentage_7d >= 0:
-        st.markdown(f"<h1 style='text-align: left; color: green;'>{number2}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<h1 style='text-align: left; color: limegreen;'>{number2}</h1>", unsafe_allow_html=True)
     else:
         st.markdown(f"<h1 style='text-align: left; color: red;'>{number2}</h1>", unsafe_allow_html=True)
 
@@ -229,6 +229,389 @@ st.plotly_chart(fig3)
 
 
 
+
+
+
+
+
+
+
+
+
+
+# VSO Pool2s Numbers
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## VSO Pool2s Liquidity")
+# load parameters for the covalenthq API url
+API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
+chain_id = 43114
+contract_address = '0x84cf8ef74974399b4473bcf474507fe9557250ab'
+page_size = 200_000
+payload = {
+                "key": API_KEY,
+                "page-size": page_size,
+                "block-signed-at-asc": True
+            }
+
+
+# load VSO-ELK Pool on ELk Finance from covalenthq API
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso_1 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_elk_finance['vso_balance'].append(balance_vso)
+
+        quote_rate_vso_1 = item['quote_rate']
+        # df_elk_finance['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'ELK':
+        balance_elk = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_elk_finance['elk_balance'].append(balance_elk)
+
+        quote_rate_elk = item['quote_rate']
+        # df_elk_finance['elk_quote_rate'].append(quote_rate_elk)
+        continue
+
+
+st.markdown("### VSO-ELK Elk Finance")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{balance_vso_1:,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**ELK Amount**")
+    number1 = str(f'{balance_elk:,}') + ' ELK'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Total Liquidity in USD**")
+    total_liq = float("{:.2f}".format((balance_vso_1 * quote_rate_vso_1) + (balance_elk * quote_rate_elk)))
+    number1 = str(f'{total_liq:,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+# load VSO-WAVAX Pool on Pangolin from covalenthq API
+contract_address = '0x2b532bC0aFAe65dA57eccFB14ff46d16a12de5E6'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso_2 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_vso_2 = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'WAVAX':
+        balance_wavax = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_wavax = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+st.markdown("### VSO-WAVAX Pangolin")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{balance_vso_2:,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**WAVAX Amount**")
+    number1 = str(f'{balance_wavax:,}') + ' WAVAX'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Total Liquidity in USD**")
+    total_liq = float("{:.2f}".format((balance_vso_2 * quote_rate_vso_2) + (balance_wavax * quote_rate_wavax)))
+    number1 = str(f'{total_liq:,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+# load PNG-VSO Pool on Pangolin from covalenthq API
+contract_address = '0x9D472e21f6589380B21C42674B3585C47b74c891'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso_3 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_vso_3 = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+
+    if item['contract_ticker_symbol'] == 'PNG':
+        balance_png = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_png = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+st.markdown("### PNG-VSO Pangolin")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{balance_vso_3:,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**PNG Amount**")
+    number1 = str(f'{balance_png:,}') + ' PNG'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Total Liquidity in USD**")
+    total_liq = float("{:.2f}".format((balance_vso_3 * quote_rate_vso_3) + (balance_png * quote_rate_png)))
+    number1 = str(f'{total_liq:,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+# load VSO-WAVAX Pool on Lydia Finance from covalenthq API
+contract_address = '0x4C9b23dFFF6a15cad84008ecf5B424B715D8E82C'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso_4 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_vso_4 = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'WAVAX':
+        balance_wavax = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_wavax = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+st.markdown("### VSO-WAVAX Lydia Finance")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{balance_vso_4:,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**WAVAX Amount**")
+    number1 = str(f'{balance_wavax:,}') + ' WAVAX'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Total Liquidity in USD**")
+    total_liq = float("{:.2f}".format((balance_vso_4 * quote_rate_vso_4) + (balance_wavax * quote_rate_wavax)))
+    number1 = str(f'{total_liq:,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+# load VSO-WAVAX Pool on Trader Joe from covalenthq API
+contract_address = '0x00979bd14bd5eb5c456c5478d3bf4b6e9212ba7d'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso_5 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_vso_5 = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'WAVAX':
+        balance_wavax = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_wavax = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+
+st.markdown("### VSO-WAVAX Trader Joe")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{balance_vso_5:,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**WAVAX Amount**")
+    number1 = str(f'{balance_wavax:,}') + ' WAVAX'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Total Liquidity in USD**")
+    total_liq = float("{:.2f}".format((balance_vso_5 * quote_rate_vso_5) + (balance_wavax * quote_rate_wavax)))
+    number1 = str(f'{total_liq:,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+
+# VSO Farms and Pools Numbers
+st.markdown("<hr/>", unsafe_allow_html=True)
+
+st.markdown("## VSO Farms and Staking Pools")
+# load parameters for the covalenthq API url
+
+st.markdown("### VSO 90-Day Lockup Staking Pool Trustswap")
+
+# load VSO 90-Day Lockup Staking Pool on Trustswap
+contract_address = '0xda420bd5f676da1c8cb620313b0ba6d93e963e5f'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_vso = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Staked**")
+    number1 = str(f'{round(balance_vso_5, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
+st.markdown("### SWAP-VSO Staking Pool on Trustswap (stake SWAP, earn VSO)")
+# load SWAP-VSO Staking Pool on Trustswap
+contract_address = '0x454d379Ba89EB7BdA6AAA0420B056bD03fcF012B'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'SWAP.e':
+        balance_swap = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['vso_balance'].append(balance_vso)
+
+        quote_rate_swap = item['quote_rate']
+        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_vso = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Staked**")
+    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+print('hi')
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+st.markdown("### VSO Staking Pool on Trustswap")
+# load Verso Staking Pool on Trustswap
+contract_address = '0xDa719fE5443a2EFD5a61Ceb11fcb2a02FCeb8923'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_pangolin['elk_balance'].append(balance_wavax)
+
+        quote_rate_vso = item['quote_rate']
+        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
+        continue
+
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Staked**")
+    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+
+st.markdown("<hr/>", unsafe_allow_html=True)
 
 st.markdown("## VSO Token Distribution")
 
@@ -352,511 +735,4 @@ fig.update_traces(marker_line_width=1.5)
 # fig.update_layout(barmode='stack')
 st.plotly_chart(fig)
 
-
-
-
-
-
-
-
-# VSO Pool2s Numbers
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## VSO Pool2s Liquidity")
-# load parameters for the covalenthq API url
-API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
-chain_id = 43114
-contract_address = '0x84cf8ef74974399b4473bcf474507fe9557250ab'
-page_size = 200_000
-payload = {
-                "key": API_KEY,
-                "page-size": page_size,
-                "block-signed-at-asc": True
-            }
-
-
-# load VSO-ELK Pool on ELk Finance from covalenthq API
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_elk_finance['vso_balance'].append(balance_vso)
-
-        quote_rate_vso = item['quote_rate']
-        # df_elk_finance['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-    if item['contract_ticker_symbol'] == 'ELK':
-        balance_elk = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_elk_finance['elk_balance'].append(balance_elk)
-
-        quote_rate_elk = item['quote_rate']
-        # df_elk_finance['elk_quote_rate'].append(quote_rate_elk)
-        continue
-
-
-st.markdown("### VSO-ELK Elk Finance")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**ELK Amount**")
-    number1 = str(f'{balance_elk:,}') + ' ELK'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with third_kpi:
-    st.markdown("**Total Liquidity in USD**")
-    total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_elk * quote_rate_elk)))
-    number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-
-# load VSO-WAVAX Pool on Pangolin from covalenthq API
-contract_address = '0x2b532bC0aFAe65dA57eccFB14ff46d16a12de5E6'
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['vso_balance'].append(balance_vso)
-
-        quote_rate_vso = item['quote_rate']
-        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-    if item['contract_ticker_symbol'] == 'WAVAX':
-        balance_wavax = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['elk_balance'].append(balance_wavax)
-
-        quote_rate_wavax = item['quote_rate']
-        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
-        continue
-
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-st.markdown("### VSO-WAVAX Pangolin")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**WAVAX Amount**")
-    number1 = str(f'{balance_wavax:,}') + ' WAVAX'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with third_kpi:
-    st.markdown("**Total Liquidity in USD**")
-    total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_wavax * quote_rate_wavax)))
-    number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-
-# load PNG-VSO Pool on Pangolin from covalenthq API
-contract_address = '0x9D472e21f6589380B21C42674B3585C47b74c891'
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['vso_balance'].append(balance_vso)
-
-        quote_rate_vso = item['quote_rate']
-        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-
-    if item['contract_ticker_symbol'] == 'PNG':
-        balance_png = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['elk_balance'].append(balance_wavax)
-
-        quote_rate_png = item['quote_rate']
-        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
-        continue
-
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-st.markdown("### PNG-VSO Pangolin")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**PNG Amount**")
-    number1 = str(f'{balance_png:,}') + ' PNG'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with third_kpi:
-    st.markdown("**Total Liquidity in USD**")
-    total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_png * quote_rate_png)))
-    number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-
-# load VSO-WAVAX Pool on Lydia Finance from covalenthq API
-contract_address = '0x4C9b23dFFF6a15cad84008ecf5B424B715D8E82C'
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['vso_balance'].append(balance_vso)
-
-        quote_rate_vso = item['quote_rate']
-        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-    if item['contract_ticker_symbol'] == 'WAVAX':
-        balance_wavax = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['elk_balance'].append(balance_wavax)
-
-        quote_rate_wavax = item['quote_rate']
-        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
-        continue
-
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-st.markdown("### VSO-WAVAX Lydia Finance")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{balance_vso:,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with second_kpi:
-    st.markdown("**WAVAX Amount**")
-    number1 = str(f'{balance_wavax:,}') + ' WAVAX'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-with third_kpi:
-    st.markdown("**Total Liquidity in USD**")
-    total_liq = float("{:.2f}".format((balance_vso * quote_rate_vso) + (balance_wavax * quote_rate_wavax)))
-    number1 = str(f'{total_liq:,}') + ' USD'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-
-# load VSO-WAVAX Pool on Trader Joe from covalenthq API
-contract_address = '0x00979bd14bd5eb5c456c5478d3bf4b6e9212ba7d'
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['vso_balance'].append(balance_vso)
-
-        quote_rate_vso = item['quote_rate']
-        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-    if item['contract_ticker_symbol'] == 'WAVAX':
-        balance_wavax = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['elk_balance'].append(balance_wavax)
-
-        quote_rate_wavax = item['quote_rate']
-        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
-        continue
-
-
-# VSO Pool2s Numbers
-st.markdown("<hr/>", unsafe_allow_html=True)
-
-st.markdown("## VSO Farms and Staking Pools")
-# load parameters for the covalenthq API url
-API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
-chain_id = 43114
-contract_address = '0xda420bd5f676da1c8cb620313b0ba6d93e963e5f'
-page_size = 200_000
-payload = {
-                "key": API_KEY,
-                "page-size": page_size,
-                "block-signed-at-asc": True
-            }
-
-
-
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/transactions_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-transaction_list = []
-# load data for pool contract address
-items = url.json()['data']['items']
-for item in items:
-    log_events = item['log_events']
-
-    # if the transaction is not a VSO transaction, skip to next log_event
-    for log_event in log_events:
-        if log_event['sender_contract_ticker_symbol'] != 'VSO':
-            continue
-
-        # create one dictionary per details/parameters of each transaction
-        tx_params = {}
-
-        block_height = log_event['block_height']
-        tx_params['block_height'] = block_height
-
-        tx_hash = log_event['tx_hash']
-        tx_params['tx_hash'] = tx_hash
-        # print(block_height, tx_hash)
-
-        decoded = log_event['decoded']
-        params = decoded['params']
-
-        # some params objects are TypeNone, so skip those
-        if params is None:
-            continue
-
-        # create for loop for each parameter (from (address), to (address), amount (value of VSO transaction))
-        for param_dict in params:
-            name = param_dict['name']
-
-            if name == 'from':
-                tx_params['from'] = param_dict['value']
-                continue
-            elif name == 'to':
-                tx_params['to'] = param_dict['value']
-                continue
-            elif name == 'value':
-                tx_params['amount'] = param_dict['value']
-
-            # for each created dictionary of transaction parameters, add it to the empty list created in the beginning
-            transaction_list.append(tx_params)
-
-df = pd.DataFrame(transaction_list)
-
-# reformat 'amount' column into floats
-df['amount'] = [float("{:.2f}".format(float(item) / 10 ** 18)) for item in df['amount']]
-
-# print(df.dropna().head())
-
-grouped_txs = df['amount'].groupby(df['to']).sum()
-total_outflows = []
-for row in grouped_txs:
-    if row > 1000000:
-        total_inflows = row
-    else:
-        total_outflows.append(row)
-
-total_outflows = sum(total_outflows)
-balance = total_inflows - total_outflows
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-st.markdown("### VSO 90-Day Lockup Staking Pool Trustswap")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{round(balance, 2):,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-
-
-
-
-
-
-
-# load parameters for the covalenthq API url
-API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
-chain_id = 43114
-contract_address = '0xDa719fE5443a2EFD5a61Ceb11fcb2a02FCeb8923'
-page_size = 200_000
-payload = {
-                "key": API_KEY,
-                "page-size": page_size,
-                "block-signed-at-asc": True
-            }
-
-
-
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/transactions_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-transaction_list = []
-# load data for pool contract address
-items = url.json()['data']['items']
-for item in items:
-    log_events = item['log_events']
-
-    # if the transaction is not a VSO transaction, skip to next log_event
-    for log_event in log_events:
-        if log_event['sender_contract_ticker_symbol'] != 'VSO':
-            continue
-
-        # create one dictionary per details/parameters of each transaction
-        tx_params = {}
-
-        block_height = log_event['block_height']
-        tx_params['block_height'] = block_height
-
-        tx_hash = log_event['tx_hash']
-        tx_params['tx_hash'] = tx_hash
-        # print(block_height, tx_hash)
-
-        decoded = log_event['decoded']
-        params = decoded['params']
-
-        # some params objects are TypeNone, so skip those
-        if params is None:
-            continue
-
-        # create for loop for each parameter (from (address), to (address), amount (value of VSO transaction))
-        for param_dict in params:
-            name = param_dict['name']
-
-            if name == 'from':
-                tx_params['from'] = param_dict['value']
-                continue
-            elif name == 'to':
-                tx_params['to'] = param_dict['value']
-                continue
-            elif name == 'value':
-                tx_params['amount'] = param_dict['value']
-
-            # for each created dictionary of transaction parameters, add it to the empty list created in the beginning
-            transaction_list.append(tx_params)
-
-df = pd.DataFrame(transaction_list)
-
-# reformat 'amount' column into floats
-df['amount'] = [float("{:.2f}".format(float(item) / 10 ** 18)) for item in df['amount']]
-
-# print(df.dropna().head())
-
-grouped_txs = df['amount'].groupby(df['to']).sum()
-total_outflows = []
-for row in grouped_txs:
-    if row > 1000000:
-        total_inflows = row
-    else:
-        total_outflows.append(row)
-
-total_outflows = sum(total_outflows)
-balance = total_inflows - total_outflows
-
-
-st.markdown("### VSO Staking Pool Trustswap")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{round(balance, 2):,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-print('hi')
-
-
-
-
-# load SWAP-VSO Staking Pool on Trustswap
-contract_address = '0x454d379Ba89EB7BdA6AAA0420B056bD03fcF012B'
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'SWAP.e':
-        balance_swap = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['vso_balance'].append(balance_vso)
-
-        quote_rate_swap = item['quote_rate']
-        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['elk_balance'].append(balance_wavax)
-
-        quote_rate_vso = item['quote_rate']
-        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
-        continue
-
-st.markdown("### SWAP-VSO Staking Pool on Trustswap")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
-print('hi')
-
-
-# load Verso Staking Pool on Trustswap
-contract_address = '0xDa719fE5443a2EFD5a61Ceb11fcb2a02FCeb8923'
-covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
-url = requests.get(url=covalent_url, params=payload)
-
-# load data for pool contract address
-items = url.json()['data']['items']
-
-for item in items:
-    if item['contract_ticker_symbol'] == 'SWAP.e':
-        balance_swap = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['vso_balance'].append(balance_vso)
-
-        quote_rate_swap = item['quote_rate']
-        # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
-        continue
-
-    if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
-        # df_pangolin['elk_balance'].append(balance_wavax)
-
-        quote_rate_vso = item['quote_rate']
-        # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
-        continue
-
-st.markdown("### SWAP-VSO Staking Pool on Trustswap")
-first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
-
-with first_kpi:
-    st.markdown("**VSO Amount**")
-    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 print('hi')
