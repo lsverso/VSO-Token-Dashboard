@@ -505,6 +505,10 @@ with third_kpi:
 
 
 
+
+
+
+
 # VSO Farms and Pools Numbers
 st.markdown("<hr/>", unsafe_allow_html=True)
 
@@ -523,10 +527,10 @@ items = url.json()['data']['items']
 
 for item in items:
     if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        balance_vso_6 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
         # df_pangolin['vso_balance'].append(balance_vso)
 
-        quote_rate_vso = item['quote_rate']
+        quote_rate_vso_6 = item['quote_rate']
         # df_pangolin['vso_quote_rate'].append(quote_rate_vso)
         continue
 
@@ -535,7 +539,7 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 
 with first_kpi:
     st.markdown("**VSO Staked**")
-    number1 = str(f'{round(balance_vso_5, 2):,}') + ' VSO'
+    number1 = str(f'{round(balance_vso_6, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 st.text("")
@@ -563,10 +567,10 @@ for item in items:
         continue
 
     if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        balance_vso_7 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
         # df_pangolin['elk_balance'].append(balance_wavax)
 
-        quote_rate_vso = item['quote_rate']
+        quote_rate_vso_7 = item['quote_rate']
         # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
         continue
 
@@ -575,7 +579,7 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 
 with first_kpi:
     st.markdown("**VSO Staked**")
-    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
+    number1 = str(f'{round(balance_vso_7, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 print('hi')
 
@@ -595,10 +599,10 @@ items = url.json()['data']['items']
 
 for item in items:
     if item['contract_ticker_symbol'] == 'VSO':
-        balance_vso = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        balance_vso_8 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
         # df_pangolin['elk_balance'].append(balance_wavax)
 
-        quote_rate_vso = item['quote_rate']
+        quote_rate_vso_8 = item['quote_rate']
         # df_pangolin['elk_quote_rate'].append(quote_rate_wavax)
         continue
 
@@ -606,7 +610,7 @@ first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(
 
 with first_kpi:
     st.markdown("**VSO Staked**")
-    number1 = str(f'{round(balance_vso, 2):,}') + ' VSO'
+    number1 = str(f'{round(balance_vso_8, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
 
@@ -688,13 +692,15 @@ with second_kpi:
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number2}</h1>", unsafe_allow_html=True)
 
 with third_kpi:
-    st.markdown("**Farms**")
-    number3 = 'NaN'
+    st.markdown("**Farms and Staking Pools**")
+    total_farms_and_staking_pools_balance = balance_vso_6 + balance_vso_7 + balance_vso_8
+    number3 = str(f'{round(total_farms_and_staking_pools_balance, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 with fourth_kpi:
     st.markdown("**Pools**")
-    number4 = 'NaN'
+    total_pool_balance = balance_vso_1 + balance_vso_2 + balance_vso_3 + balance_vso_4 + balance_vso_5
+    number4 = str(f'{round(total_pool_balance, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number4}</h1>", unsafe_allow_html=True)
 
 
