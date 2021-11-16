@@ -51,8 +51,7 @@ df_vso = pd.DataFrame(vso_prices['prices'], columns=['Date', 'Price'])
 # try to read all AVAX prices, and if code doesn't run it's because AVAX prices haven't updated as fast as VSO's, so in that case, run avax_prices['prices'][:-1]
 try:
     df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
-    df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),
-                               columns=['Price'])  # VSO/AVAX pair
+    df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
 
 except:
     df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
@@ -621,30 +620,37 @@ st.markdown("## VSO Token Distribution")
 
 # define variables for internal an external vested tokens
 # TODO adjust static "today" date to dynamic "today"
-internal_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'Internal') &(df['Date of Unlock'] >= '2021-11-02T00:00:00')].sum()
-external_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'External') &(df['Date of Unlock'] >= '2021-11-02T00:00:00')].sum()
-unknown_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'Unknown') & (df['Date of Unlock'] >= '2021-11-02T00:00:00')].sum()
+internal_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'Internal') &(df['Date of Unlock'] > '2021-11-02T00:00:00')].sum()
+external_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'External') &(df['Date of Unlock'] > '2021-11-02T00:00:00')].sum()
+unknown_locked = df['VSO Amount'].loc[(df['Internal or External'] == 'Unknown') & (df['Date of Unlock'] > '2021-11-02T00:00:00')].sum()
 
 external_locked_total = external_locked + unknown_locked
 
+internal_unlocked = df['VSO Amount'].loc[(df['Internal or External'] == 'Internal') &(df['Date of Unlock'] == '2021-11-02T00:00:00')].sum()
+external_unlocked = df['VSO Amount'].loc[(df['Internal or External'] == 'External') &(df['Date of Unlock'] == '2021-11-02T00:00:00')].sum()
+unknown_unlocked = df['VSO Amount'].loc[(df['Internal or External'] == 'Unknown') & (df['Date of Unlock'] == '2021-11-02T00:00:00')].sum()
+
+total_unlocked = internal_unlocked + external_unlocked + unknown_unlocked
 
 
 
 max_supply = 100000000
 
-# circulating supply
-# liquid_supply_internal =
-# liquid_supply_external =
-# liquid_supply = liquid_supply_internal + liquid_supply_external
-#
-# total_pools =
-# total_farms =
-# illiquid_supply =
+total_farms_and_staking_pools_balance = balance_vso_6 + balance_vso_7 + balance_vso_8
+total_pool_balance = balance_vso_1 + balance_vso_2 + balance_vso_3 + balance_vso_4 + balance_vso_5
 
-# circ_supply = liquid_supply + illiquid_supply
+# circulating supply
+liquid_supply = internal_unlocked + external_unlocked + unknown_unlocked # does this inclide tokens in circulation that were not vested before, but just issued into the market?
+liquid_supply_2 = liquid_supply + (max_supply - liquid_supply)
+
+illiquid_supply = total_farms_and_staking_pools_balance + total_pool_balance
+circ_supply = liquid_supply_2 + illiquid_supply
 
 # vested tokens
-vested_tokens = internal_locked + external_locked_total
+vested_tokens = internal_locked + external_locked_total + unknown_locked
+
+print(circ_supply + vested_tokens)
+print(total_farms_and_staking_pools_balance + total_pool_balance + liquid_supply_2)
 
 st.markdown("### Max Supply = Circulating Supply + Vested Tokens")
 formula_value = str(f'{max_supply:,}') + ' = ' + str(f'{max_supply - vested_tokens:,}') + ' + ' + str(f'{vested_tokens:,}')
@@ -693,13 +699,11 @@ with second_kpi:
 
 with third_kpi:
     st.markdown("**Farms and Staking Pools**")
-    total_farms_and_staking_pools_balance = balance_vso_6 + balance_vso_7 + balance_vso_8
     number3 = str(f'{round(total_farms_and_staking_pools_balance, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 with fourth_kpi:
     st.markdown("**Pools**")
-    total_pool_balance = balance_vso_1 + balance_vso_2 + balance_vso_3 + balance_vso_4 + balance_vso_5
     number4 = str(f'{round(total_pool_balance, 2):,}') + ' VSO'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number4}</h1>", unsafe_allow_html=True)
 
@@ -733,8 +737,8 @@ fig = px.bar(pivot_table_subset,
              template = 'plotly_dark',
              color_discrete_sequence = colors,
              # title = 'VSO Unlocks by Date',
-             height=400,
-             width=750
+             height=600,
+             width=1200
              )
 
 fig.update_traces(marker_line_width=1.5)
