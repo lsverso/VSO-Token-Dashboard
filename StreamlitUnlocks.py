@@ -50,13 +50,15 @@ df_vso = pd.DataFrame(vso_prices['prices'], columns=['Date', 'Price'])
 
 # try to read all AVAX prices, and if code doesn't run it's because AVAX prices haven't updated as fast as VSO's, so in that case, run avax_prices['prices'][:-1]
 try:
-    df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
+    df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
     df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
 
 except:
-    df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
+    df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
     df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
 
+
+df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
 
 # create date-indexed df for all tokens (one token per column)
 df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO/USD': df_vso['Price'], 'AVAX/USD': df_avax['Price'], 'VSO/AVAX': df_vso_avax['Price']})
