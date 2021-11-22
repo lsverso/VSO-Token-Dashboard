@@ -53,12 +53,18 @@ try:
     df_avax = pd.DataFrame(avax_prices['prices'], columns=['Date', 'Price'])
     df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
 
-except:
-    df_avax = pd.DataFrame(avax_prices['prices'][:-2], columns=['Date', 'Price'])
-    df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
+except ValueError:
+    pass
 
+    try:
+        df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
+        df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
+    except:
+        pass
 
-df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
+df_avax = pd.DataFrame(avax_prices['prices'][:-2], columns=['Date', 'Price'])
+df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
+
 
 # create date-indexed df for all tokens (one token per column)
 df_token_prices = pd.DataFrame({'Date': df_vso['Date'], 'VSO/USD': df_vso['Price'], 'AVAX/USD': df_avax['Price'], 'VSO/AVAX': df_vso_avax['Price']})
