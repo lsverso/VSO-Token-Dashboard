@@ -54,7 +54,7 @@ try:
     df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
 
 except:
-    df_avax = pd.DataFrame(avax_prices['prices'][:-1], columns=['Date', 'Price'])
+    df_avax = pd.DataFrame(avax_prices['prices'][:-2], columns=['Date', 'Price'])
     df_vso_avax = pd.DataFrame(np.array(df_vso['Price'])/np.array(df_avax['Price']), columns=['Price']) # VSO/AVAX pair
 
 
@@ -80,6 +80,43 @@ colors = px.colors.qualitative.T10
 st.set_page_config(page_title = 'Streamlit Dashboard',
     layout='wide',
     page_icon='💹')
+
+# Get list of token holders at current block height
+# load parameters for the covalenthq API url
+API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
+chain_id = 43114
+contract_address = '0x846d50248baf8b7ceaa9d9b53bfd12d7d7fbb25a'
+page_size = 200_000
+payload = {
+    "key": API_KEY,
+    "page-size": page_size,
+    "block-signed-at-asc": True
+}
+
+# load covalenthq API url with parameters
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/tokens/" + contract_address + '/token_holders/'
+url = requests.get(url=covalent_url, params=payload)
+items = url.json()['data']['items']
+
+token_holders_list = []
+
+
+for item in items:
+    token_holders_dict = {}
+    address = item['address']
+    balance = item['balance']
+
+    token_holders_dict['address'] = address
+    token_holders_dict['balance'] = balance
+
+    token_holders_list.append(token_holders_dict)
+
+
+#print(token_holders_list)
+df_token_holders = pd.DataFrame(token_holders_list)
+df_token_holders['balance'] = [float("{:.2f}".format(float(item) / 10 ** 18)) for item in df_token_holders['balance']]
+
+count_addresses = len(df_token_holders)
 
 st.title("VSO Token Dashboard")
 
@@ -119,7 +156,7 @@ with fourth_kpi:
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 
-fifth_kpi, sixth_kpi, seventh_kpi = st.columns(3)
+fifth_kpi, sixth_kpi, seventh_kpi, eight_kpi = st.columns(4)
 
 st.text("")
 st.text("")
@@ -139,6 +176,11 @@ with sixth_kpi:
 with seventh_kpi:
     st.markdown("**Fully Diluted Valuation**")
     number5 = str(f'{int(current_price * 100000000):,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number5}</h1>", unsafe_allow_html=True)
+
+with eight_kpi:
+    st.markdown("**VSO Holders**")
+    number5 = str(f'{int(count_addresses):,}') + ' Addresses'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number5}</h1>", unsafe_allow_html=True)
 
 
