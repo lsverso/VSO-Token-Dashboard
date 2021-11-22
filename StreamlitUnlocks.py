@@ -62,8 +62,8 @@ except ValueError:
     except:
         pass
 
-df_avax = pd.DataFrame(avax_prices['prices'][:-2], columns=['Date', 'Price'])
-df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
+        df_avax = pd.DataFrame(avax_prices['prices'][:-2], columns=['Date', 'Price'])
+        df_vso_avax = pd.DataFrame(np.array(df_vso['Price']) / np.array(df_avax['Price']),columns=['Price'])  # VSO/AVAX pair
 
 
 # create date-indexed df for all tokens (one token per column)
