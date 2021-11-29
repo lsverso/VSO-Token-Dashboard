@@ -272,21 +272,13 @@ st.plotly_chart(fig3)
 
 
 
+#########################################################
+# LIQUIDITY POOLS SECTION
+#########################################################
 
-
-
-
-
-
-
-
-
-
-
-# VSO Pool2s Numbers
 st.markdown("<hr/>", unsafe_allow_html=True)
 
-st.markdown("## VSO Pool2s Liquidity")
+st.markdown("## VSO Liquidity Pools")
 # load parameters for the covalenthq API url
 API_KEY = 'ckey_e1328ce2b7104ccaa03d0955258'
 chain_id = 43114
@@ -340,6 +332,57 @@ with second_kpi:
 with third_kpi:
     st.markdown("**Total Liquidity in USD**")
     total_liq = float("{:.2f}".format((balance_vso_1 * quote_rate_vso_1) + (balance_elk * quote_rate_elk)))
+    number1 = str(f'{total_liq:,}') + ' USD'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+# load HCT-VSO Pool on HurricaneSwap from covalenthq API
+contract_address = '0x2F0395de56fe11ACfDeE57C9557eDF7EFf339b37'
+covalent_url = 'https://api.covalenthq.com/v1/' + str(chain_id) + "/address/" + contract_address + '/balances_v2/?quote-currency=usd'
+url = requests.get(url=covalent_url, params=payload)
+
+# load data for pool contract address
+items = url.json()['data']['items']
+
+for item in items:
+    if item['contract_ticker_symbol'] == 'VSO':
+        balance_vso_0 = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_elk_finance['vso_balance'].append(balance_vso)
+
+        quote_rate_vso_0 = item['quote_rate']
+        # df_elk_finance['vso_quote_rate'].append(quote_rate_vso)
+        continue
+
+    if item['contract_ticker_symbol'] == 'HCT':
+        balance_hct = float("{:.2f}".format(float(item['balance']) / 10 ** 18))
+        # df_elk_finance['elk_balance'].append(balance_elk)
+
+        quote_rate_hct = item['quote_rate']
+        # df_elk_finance['elk_quote_rate'].append(quote_rate_elk)
+        continue
+
+
+st.markdown("### HCT-VSO HurricaneSwap")
+first_kpi, second_kpi, third_kpi, fourth_kpi, fifth_kpi, sixth_kpi = st.columns(6)
+
+with first_kpi:
+    st.markdown("**VSO Amount**")
+    number1 = str(f'{balance_vso_0:,}') + ' VSO'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with second_kpi:
+    st.markdown("**HCT Amount**")
+    number1 = str(f'{balance_hct:,}') + ' HCT'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
+
+with third_kpi:
+    st.markdown("**Total Liquidity in USD**")
+    total_liq = float("{:.2f}".format((balance_vso_0 * quote_rate_vso_0) + (balance_hct * quote_rate_hct)))
     number1 = str(f'{total_liq:,}') + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number1}</h1>", unsafe_allow_html=True)
 
