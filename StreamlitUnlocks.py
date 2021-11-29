@@ -162,7 +162,7 @@ with fourth_kpi:
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 
-fifth_kpi, sixth_kpi, seventh_kpi, eight_kpi = st.columns(4)
+fifth_kpi, sixth_kpi, seventh_kpi = st.columns(3)
 
 st.text("")
 st.text("")
@@ -175,16 +175,11 @@ with fifth_kpi:
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 with sixth_kpi:
-    st.markdown("**Circulating Supply**")
-    number4 = str(f'{int(circulating_supply):,}') + ' VSO'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number4}</h1>", unsafe_allow_html=True)
-
-with seventh_kpi:
     st.markdown("**Fully Diluted Valuation**")
     number5 = str(f'{int(current_price * 100000000):,}') + ' USD'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number5}</h1>", unsafe_allow_html=True)
 
-with eight_kpi:
+with seventh_kpi:
     st.markdown("**VSO Holders**")
     number5 = str(f'{int(count_addresses):,}') + ' Addresses'
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number5}</h1>", unsafe_allow_html=True)
