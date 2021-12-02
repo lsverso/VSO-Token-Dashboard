@@ -7,3 +7,4 @@ pycoingecko
 matplotlib
 bs4
 selenium
+pymongo
