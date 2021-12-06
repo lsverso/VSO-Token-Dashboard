@@ -6,6 +6,8 @@ import requests
 import streamlit as st
 import numpy as np
 from pycoingecko import CoinGeckoAPI
+from Data_Calculations import diff
+from Data_Calculations import df as df_VSO_Holders
 
 
 # import and print latest VSO Unlock file to copy output and paste into the df variable that follows as a manually created dataframe
@@ -118,11 +120,17 @@ for item in items:
     token_holders_list.append(token_holders_dict)
 
 
-#print(token_holders_list)
 df_token_holders = pd.DataFrame(token_holders_list)
 df_token_holders['balance'] = [float("{:.2f}".format(float(item) / 10 ** 18)) for item in df_token_holders['balance']]
 
+# count of VSO token holders
 count_addresses = len(df_token_holders)
+
+# extract/fetch difference in count of VSO token holders
+print(df_VSO_Holders.head())
+
+diff_vso_holders_1d = diff['holder count change'][0] / 5053
+print(diff_vso_holders_1d)
 
 st.title("VSO Token Dashboard")
 
@@ -162,7 +170,7 @@ with fourth_kpi:
     st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number3}</h1>", unsafe_allow_html=True)
 
 
-fifth_kpi, sixth_kpi, seventh_kpi = st.columns(3)
+fifth_kpi, sixth_kpi, seventh_kpi, eigth_kpi = st.columns(4)
 
 st.text("")
 st.text("")
@@ -181,8 +189,16 @@ with sixth_kpi:
 
 with seventh_kpi:
     st.markdown("**VSO Holders**")
-    number5 = str(f'{int(count_addresses):,}') + ' Addresses'
-    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number5}</h1>", unsafe_allow_html=True)
+    number6 = str(f'{int(count_addresses):,}') + ' Addresses'
+    st.markdown(f"<h1 style='text-align: left; color: deepskyblue;'>{number6}</h1>", unsafe_allow_html=True)
+
+with eigth_kpi:
+    st.markdown("**VSO Holder Change 1d**")
+    number7 = str(round(diff_vso_holders_1d * 100, 2)) + '%'
+    if diff_vso_holders_1d >= 0:
+        st.markdown(f"<h1 style='text-align: left; color: limegreen;'>{number7}</h1>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<h1 style='text-align: left; color: red;'>{number7}</h1>", unsafe_allow_html=True)
 
 
 # TODO AVAX data
